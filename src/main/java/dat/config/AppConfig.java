@@ -1,7 +1,7 @@
 package dat.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dat.controller.ExceptionController;
+import dat.controller.impl.ExceptionController;
 import dat.exceptions.ApiException;
 import dat.routes.Routes;
 import dat.security.controller.SecurityController;

@@ -1,0 +1,66 @@
+package dat.controller.impl;
+
+import dat.config.HibernateConfig;
+import dat.controller.IController;
+import dat.daos.impl.MealDAO;
+import dat.dtos.MealDTO;
+import io.javalin.http.Context;
+import jakarta.persistence.EntityManagerFactory;
+
+public class MealController implements IController<MealDTO, Integer> {
+
+    private final MealDAO dao;
+
+    public MealController() {
+        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("meals");
+        this.dao = MealDAO.getInstance(emf);
+    }
+
+
+    @Override
+    public void read(Context ctx) {
+        // request
+        int id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
+        // DTO
+        MealDTO mealDTO = dao.read(id);
+        // response
+        ctx.res().setStatus(200);
+        ctx.json(mealDTO, MealDTO.class);
+    }
+
+    @Override
+    public void readAll(Context ctx) {
+
+    }
+
+    @Override
+    public void create(Context ctx) {
+
+    }
+
+    @Override
+    public void update(Context ctx) {
+
+    }
+
+    @Override
+    public void delete(Context ctx) {
+
+    }
+
+    @Override
+    public boolean validatePrimaryKey(Integer integer) {
+        return dao.validatePrimaryKey(integer);
+    }
+
+    @Override
+    public MealDTO validateEntity(Context ctx) {
+        return ctx.bodyValidator(MealDTO.class)
+                .check(m -> m.getMealName() != null && !m.getMealName().isEmpty(), "Meal name must be set")
+                .check(m -> m.getMealDescription() != null && !m.getMealDescription().isEmpty(), "Meal description must be set")
+                .check(m -> m.getMealInstructions() != null && !m.getMealInstructions().isEmpty(), "Meal instructions must be set")
+                .check(m -> m.getMealPrepTime() > 0, "Meal prep time must be greater than 0")
+                .check(m -> m.getMealRating() >= 0 && m.getMealRating() <= 5, "Meal rating must be between 0 and 5")
+                .get();
+    }
+}
