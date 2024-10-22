@@ -7,6 +7,8 @@ import dat.dtos.MealDTO;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.util.List;
+
 public class MealController implements IController<MealDTO, Integer> {
 
     private final MealDAO dao;
@@ -30,17 +32,34 @@ public class MealController implements IController<MealDTO, Integer> {
 
     @Override
     public void readAll(Context ctx) {
-
+        // List of DTOS
+        List<MealDTO> mealDTOS = dao.readAll();
+        //response
+        ctx.res().setStatus(200);
+        ctx.json(mealDTOS, MealDTO.class);
     }
 
     @Override
     public void create(Context ctx) {
-
+        //request
+        MealDTO jsonRequest = ctx.bodyAsClass(MealDTO.class);
+        // DTO
+        MealDTO mealDTO = dao.create(jsonRequest);
+        //response
+        ctx.res().setStatus(201);
+        ctx.json(mealDTO, MealDTO.class);
     }
 
     @Override
     public void update(Context ctx) {
-
+        //request
+        int id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
+        // DTO
+        MealDTO jsonRequest = ctx.bodyAsClass(MealDTO.class);
+        MealDTO mealDTO = dao.update(id, jsonRequest);
+        //response
+        ctx.res().setStatus(200);
+        ctx.json(mealDTO, MealDTO.class);
     }
 
     @Override
