@@ -101,3 +101,22 @@ Content-Type: application/json
   "roomPrice": 1150,
   "roomType": "SINGLE"
 }
+
+
+###
+
+
+POST http://localhost:7007/api/ingredients
+Content-Type: application/json
+Authorization: Bearer {{dev}}
+
+{
+  "name": "Pepper",
+  "quantity": "5000000000"
+}
+
+###
+
+GET http://localhost:7007/api/ingredients/1
+
+###

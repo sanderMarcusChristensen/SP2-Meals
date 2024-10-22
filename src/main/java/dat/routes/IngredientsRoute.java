@@ -21,7 +21,7 @@ public class IngredientsRoute {
     protected EndpointGroup getIngredientsRoutes() {
         return () -> {
 
-            post("/", ingredientsController::create, Role.ADMIN);
+            post("/", ingredientsController::create, Role.ANYONE);
             get("/", ingredientsController::readAll, Role.ANYONE);
             get("/{id}", ingredientsController::read, Role.ANYONE);
             put("/{id}", ingredientsController::update, Role.ADMIN);
