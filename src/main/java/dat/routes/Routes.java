@@ -11,7 +11,7 @@ public class Routes {
     public EndpointGroup getApiRoutes() {
 
         return () -> {
-            path("/meal", mealRoutes.getMealRoutes());
+            path("/meals", mealRoutes.getMealRoutes());
         };
     }
 }
