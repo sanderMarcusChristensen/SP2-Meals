@@ -3,6 +3,7 @@ package dat.daos.impl;
 import dat.daos.IDAO;
 import dat.dtos.IngredientsDTO;
 import dat.entities.Ingredients;
+import dat.entities.Meal;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
@@ -66,19 +67,44 @@ public class IngredientsDAO implements IDAO<IngredientsDTO,Integer> {
     }
 
     @Override
-    public IngredientsDTO update(Integer integer, IngredientsDTO ingredientsDTO) {
+    public IngredientsDTO update(Integer id, IngredientsDTO ingredientsDTO) {
+        try(EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            Ingredients ingredients = em.find(Ingredients.class, id);
+
+            if(ingredients == null){
+                em.getTransaction().rollback();
+                return null;
+            }
+            if(ingredients.getName() != null ){
+                ingredients.setName(ingredientsDTO.getName());
+            }
+
+            if (ingredients.getQuantity() != null){
+                ingredients.setQuantity(ingredientsDTO.getQuantity());
+            }
+
+            em.merge(ingredients);
+            em.getTransaction().commit();
+            return new IngredientsDTO(ingredients);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
-    public void delete(Integer integer) {
+    public void delete(Integer id) {
 
 
     }
 
     @Override
     public boolean validatePrimaryKey(Integer integer) {
-        return false;
+        try (EntityManager em = emf.createEntityManager()) {
+            Ingredients ingredients = em.find(Ingredients.class, integer);
+            return ingredients != null;
+        }
     }
 }
 
