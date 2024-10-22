@@ -16,7 +16,8 @@ public class MealRoute {
             get("/", mealController::readAll, Role.ANYONE);
             get("/{id}", mealController::read, Role.ANYONE);
             put("/{id}", mealController::update, Role.ANYONE);
-            delete("/{id}", mealController::delete, Role.ADMIN);
+            delete("/{id}", mealController::delete, Role.ANYONE);
+            get("/prepTime/{time}", mealController::maxPrepTime, Role.ANYONE);
         };
     }
 }
