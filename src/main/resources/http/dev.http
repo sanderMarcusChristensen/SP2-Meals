@@ -1,3 +1,5 @@
+
+# ------------------------------ Security ENDPOINTS------------------------------
 ### A simple get request to the test endpoint. No need for login
 GET {{url}}/auth/test/
 
@@ -44,6 +46,12 @@ Accept: application/json
 Authorization: Bearer {{jwt_token}}
 
 ###
+
+
+
+#------------------------------ MEALS ENDPOINTS------------------------------
+
+
 GET {{url}}/meals
 
 ###
@@ -79,31 +87,7 @@ Authorization: Bearer {{jwt_token}}
 
 ###
 
-DELETE {{url}}/hotels/5
-
-###
-
-// Room API
-
-GET {{url}}/rooms
-
-###
-
-GET {{url}}/rooms/1
-
-###
-
-POST {{url}}/rooms/hotel/3
-Content-Type: application/json
-
-{
-  "roomNumber": 11,
-  "roomPrice": 1150,
-  "roomType": "SINGLE"
-}
-
-
-###
+# ------------------------------ Ingredients ENDPOINTS------------------------------
 
 
 POST http://localhost:7007/api/ingredients
