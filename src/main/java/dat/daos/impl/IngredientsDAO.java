@@ -107,5 +107,20 @@ public class IngredientsDAO implements IDAO<IngredientsDTO,Integer> {
             return ingredients != null;
         }
     }
+
+    public IngredientsDTO addCreated(IngredientsDTO dto) {
+
+        Ingredients ingredients = new Ingredients(dto);
+
+
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            em.persist(ingredients);
+            em.getTransaction().commit();
+
+            return new IngredientsDTO(ingredients);
+
+        }
+    }
 }
 

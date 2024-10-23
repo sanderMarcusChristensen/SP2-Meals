@@ -28,6 +28,8 @@ public class IngredientsRoute {
             delete("/{id}", ingredientsController::delete, Role.ANYONE);
 
 
+
+
         };
     }
 
