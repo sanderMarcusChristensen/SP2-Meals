@@ -1,12 +1,14 @@
 package dat.entities;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import dat.dtos.IngredientsDTO;
 import dat.dtos.MealDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
 
 @Entity
 @Data
@@ -41,12 +43,21 @@ public class Meal {
     @Column(name = "meal_rating", nullable = false)
     private double mealRating;
 
-    public Meal(String mealName, String mealDescription, String mealInstructions, double mealPrepTime, double mealRating) {
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "meal_ingredients",
+            joinColumns = @JoinColumn(name = "meal_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id")
+    )
+    private List<Ingredients> ingredients;
+
+    public Meal(String mealName, String mealDescription, String mealInstructions, double mealPrepTime, double mealRating, List<Ingredients> ingredients) {
         this.mealName = mealName;
         this.mealDescription = mealDescription;
         this.mealInstructions = mealInstructions;
         this.mealPrepTime = mealPrepTime;
         this.mealRating = mealRating;
+        this.ingredients = ingredients;
     }
 
     public Meal(MealDTO mealDTO) {
@@ -57,11 +68,26 @@ public class Meal {
         this.mealPrepTime = mealDTO.getMealPrepTime();
         this.mealRating = mealDTO.getMealRating();
 
+        if(mealDTO.getIngredients() != null) {
+            this.ingredients = mealDTO.getIngredients().stream()
+                    .map(Ingredients::new)
+                    .collect(Collectors.toList());
+        }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Meal meal = (Meal) o;
+        return Double.compare(mealPrepTime, meal.mealPrepTime) == 0 && Double.compare(mealRating, meal.mealRating) == 0 && Objects.equals(mealId, meal.mealId) && Objects.equals(mealName, meal.mealName) && Objects.equals(mealDescription, meal.mealDescription) && Objects.equals(mealInstructions, meal.mealInstructions) && Objects.equals(ingredients, meal.ingredients);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mealId, mealName, mealDescription, mealInstructions, mealPrepTime, mealRating, ingredients);
+    }
     public static List<Meal> toMealList(List<MealDTO> mealDTOS) {
         return mealDTOS.stream().map(Meal::new).collect(Collectors.toList());
     }
-
-    //Add equals and hashCode methods
 }

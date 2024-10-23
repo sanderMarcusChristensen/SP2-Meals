@@ -1,3 +1,5 @@
+
+# ------------------------------ Security ENDPOINTS------------------------------
 ### A simple get request to the test endpoint. No need for login
 GET {{url}}/auth/test/
 
@@ -43,7 +45,9 @@ Authorization: Bearer {{jwt_token}}
 Accept: application/json
 Authorization: Bearer {{jwt_token}}
 
-###
+
+### -----------------   Meals API   -----------------
+
 GET {{url}}/meals
 
 ###
@@ -52,6 +56,7 @@ GET {{url}}/meals/1
 
 ###
 
+#virker men skal lige kigges på
 POST {{url}}/meals
 Content-Type: application/json
 Accept: application/json
@@ -62,8 +67,11 @@ Authorization: Bearer {{jwt_token}}
   "mealDescription": "Indian/Pakistani",
   "mealInstructions": "Instruction to cook: ......",
   "mealPrepTime": 30,
-  "mealRating": 4.9
+  "mealRating": 4.9,
+  "ingredients" : [{}]
+
 }
+
 
 ###
 
@@ -79,25 +87,42 @@ Authorization: Bearer {{jwt_token}}
 
 ###
 
-DELETE {{url}}/hotels/5
+GET {{url}}/meals/prepTime/30
 
 ###
 
-// Room API
+DELETE {{url}}/meals/5
 
-GET {{url}}/rooms
 
-###
+### --------------------  Ingredients ENDPOINTS  ------------------------------
 
-GET {{url}}/rooms/1
-
-###
-
-POST {{url}}/rooms/hotel/3
+POST http://localhost:7007/api/ingredients
 Content-Type: application/json
 
 {
-  "roomNumber": 11,
-  "roomPrice": 1150,
-  "roomType": "SINGLE"
+  "name": "Salt",
+  "quantity": "Some salt"
 }
+
+###
+
+GET http://localhost:7007/api/ingredients/1
+
+###
+
+GET http://localhost:7007/api/ingredients
+
+###
+
+PUT http://localhost:7007/api/ingredients/2
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "name": "Pepper",
+  "quantity": "0,5 cups"
+}
+
+###
+
+DELETE http://localhost:7007/api/ingredients/1

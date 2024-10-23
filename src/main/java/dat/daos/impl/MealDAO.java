@@ -25,6 +25,14 @@ public class MealDAO implements IDAO<MealDTO, Integer> {
     }
 
     @Override
+    public boolean validatePrimaryKey(Integer integer) {
+        try (EntityManager em = emf.createEntityManager()) {
+            Meal meal = em.find(Meal.class, integer);
+            return meal != null;
+        }
+    }
+
+    @Override
     public MealDTO read(Integer integer) {
         try (EntityManager em = emf.createEntityManager()) {
             Meal meal = em.find(Meal.class, integer);
@@ -45,6 +53,13 @@ public class MealDAO implements IDAO<MealDTO, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Meal meal = new Meal(mealDTO);
+
+            if (meal.getIngredients() != null && !meal.getIngredients().isEmpty()) {
+                em.persist(meal);
+            } else {
+                throw new IllegalArgumentException("Meal must have ingredients.");
+            }
+
             em.persist(meal);
             em.getTransaction().commit();
             return new MealDTO(meal);
@@ -84,16 +99,29 @@ public class MealDAO implements IDAO<MealDTO, Integer> {
         }
     }
 
-    @Override
-    public void delete(Integer integer) {
-
+    public void delete(Integer mealId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            Meal meal = em.find(Meal.class, mealId);
+            if (meal != null) {
+                em.remove(meal);
+            }
+            em.getTransaction().commit();
+        }
     }
 
-    @Override
-    public boolean validatePrimaryKey(Integer integer) {
+    public List<MealDTO> maxPrepTime(int prepTime) {
         try (EntityManager em = emf.createEntityManager()) {
-            Meal meal = em.find(Meal.class, integer);
-            return meal != null;
+            TypedQuery<MealDTO> query = em.createQuery("SELECT new dat.dtos.MealDTO(m) FROM Meal m WHERE m.mealPrepTime <= :prepTime", MealDTO.class);
+            query.setParameter("prepTime", prepTime);
+            return query.getResultList();
+        }
+    }
+
+    public List<MealDTO> urmom() {
+        try (EntityManager em = emf.createEntityManager()) {
+            TypedQuery<MealDTO> query = em.createQuery("SELECT new dat.dtos.MealDTO(m) FROM Meal m", MealDTO.class);
+            return query.getResultList();
         }
     }
 }
