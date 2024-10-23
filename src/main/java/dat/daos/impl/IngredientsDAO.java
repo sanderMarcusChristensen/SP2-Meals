@@ -3,7 +3,6 @@ package dat.daos.impl;
 import dat.daos.IDAO;
 import dat.dtos.IngredientsDTO;
 import dat.entities.Ingredients;
-import dat.entities.Meal;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
@@ -14,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class IngredientsDAO implements IDAO<IngredientsDTO,Integer> {
 
-    private EntityManagerFactory emf;
+    private final EntityManagerFactory emf;
 
     public IngredientsDAO(EntityManagerFactory emf) {
         this.emf = emf;
@@ -39,8 +38,10 @@ public class IngredientsDAO implements IDAO<IngredientsDTO,Integer> {
 
     @Override
     public List<IngredientsDTO> readAll() {
-        return null;
-
+        try (EntityManager em = emf.createEntityManager()) {
+            TypedQuery<IngredientsDTO> query = em.createQuery("SELECT new dat.dtos.IngredientsDTO(i) FROM Ingredients i", IngredientsDTO.class);
+            return query.getResultList();
+        }
     }
 
     @Override

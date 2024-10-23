@@ -96,16 +96,19 @@ Authorization: Bearer {{jwt_token}}
 
 POST http://localhost:7007/api/ingredients
 Content-Type: application/json
-Authorization: Bearer {{dev}}
 
 {
-  "name": "Pepper",
-  "quantity": "5000"
+  "name": "Salt",
+  "quantity": "Some salt"
 }
 
 ###
 
 GET http://localhost:7007/api/ingredients/1
+
+###
+
+GET http://localhost:7007/api/ingredients
 
 ###
 
