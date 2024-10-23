@@ -1,11 +1,11 @@
 package dat.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import dat.dtos.MealDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -50,7 +50,7 @@ public class Meal {
     }
 
     public Meal(MealDTO mealDTO) {
-        this.mealId = mealDTO.getId();
+        this.mealId = mealDTO.getMealId();
         this.mealName = mealDTO.getMealName();
         this.mealDescription = mealDTO.getMealDescription();
         this.mealInstructions = mealDTO.getMealInstructions();

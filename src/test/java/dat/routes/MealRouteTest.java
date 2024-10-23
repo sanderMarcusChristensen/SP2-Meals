@@ -59,6 +59,21 @@ class MealRouteTest {
     }
 
     @Test
+    @DisplayName("Test get all meals")
+    void getAllMeals() {
+        Meal[] meals =
+                given()
+                        .when()
+                        .get(BASE_URL+"/meals")
+                        .then()
+                        .log().all()
+                        .statusCode(200)
+                        .extract()
+                        .as(Meal[].class);
+        assertThat(meals, arrayContainingInAnyOrder(m1, m2, m3));
+    }
+
+    @Test
     @DisplayName("Test get single meal")
     void getMeal() {
         Meal meal =
@@ -66,10 +81,47 @@ class MealRouteTest {
                         .when()
                         .get(BASE_URL + "/meals/" + m1.getMealId())
                         .then()
-                        .log.all()
+                        .log().all()
                         .statusCode(200)
                         .extract()
                         .as(Meal.class);
-        assertThat(m1.getMealName(), equalTo(meal.getMealName()));
+        assertThat(m1, samePropertyValuesAs(meal));
+    }
+
+    @Test
+    @DisplayName("Test create meal")
+    void createMeal() {
+        MealDTO mealDTO = new MealDTO("Sushi", "A delicious sushi", "Eat it", 30, 4.8);
+        Meal meal =
+                given()
+                        .contentType("application/json")
+                        .body(mealDTO)
+                        .when()
+                        .post(BASE_URL + "/meals")
+                        .then()
+                        .log().all()
+                        .statusCode(201)
+                        .extract()
+                        .as(Meal.class);
+        assertThat(meal.getMealName(), equalTo(mealDTO.getMealName()));
+    }
+
+    @Test
+    @DisplayName("Test update meal")
+    void updateMeal() {
+        assertThat(m1.getMealName(), equalTo("Burger"));
+        MealDTO mealDTO = new MealDTO("Sushi", "A delicious sushi", "Eat it", 30, 4.8);
+        Meal meal =
+                given()
+                        .contentType("application/json")
+                        .body(mealDTO)
+                        .when()
+                        .put(BASE_URL + "/meals/" + m1.getMealId())
+                        .then()
+                        .log().all()
+                        .statusCode(200)
+                        .extract()
+                        .as(Meal.class);
+        assertThat(meal.getMealName(), equalTo(mealDTO.getMealName()));
     }
 }

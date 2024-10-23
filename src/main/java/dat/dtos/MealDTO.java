@@ -1,8 +1,7 @@
 package dat.dtos;
 
 import dat.entities.Meal;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,7 +9,7 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor
 public class MealDTO {
-    private Integer id;
+    private Integer mealId;
     private String mealName;
     private String mealDescription;
     private String mealInstructions;
@@ -18,7 +17,7 @@ public class MealDTO {
     private double mealRating;
 
     public MealDTO(Meal meal) {
-        this.id = meal.getMealId();
+        this.mealId = meal.getMealId();
         this.mealName = meal.getMealName();
         this.mealDescription = meal.getMealDescription();
         this.mealInstructions = meal.getMealInstructions();

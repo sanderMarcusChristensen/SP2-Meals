@@ -1,6 +1,7 @@
 package dat.routes;
 
 import dat.daos.impl.MealDAO;
+import dat.dtos.MealDTO;
 import dat.entities.Meal;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -16,35 +17,37 @@ public class Populator {
     }
 
     public void populateDatabase() {
-        try (EntityManager em = emf.createEntityManager()) {
-            Meal m1 = Meal.builder()
-                    .mealName("Burger")
-                    .mealDescription("A delicious burger")
-                    .mealInstructions("Eat it")
-                    .mealPrepTime(10)
-                    .mealRating(4.5)
-                    .build();
-            Meal m2 = Meal.builder()
-                    .mealName("Pizza")
-                    .mealDescription("A delicious pizza")
-                    .mealInstructions("Eat it")
-                    .mealPrepTime(20)
-                    .mealRating(4.7)
-                    .build();
-            Meal m3 = Meal.builder()
-                    .mealName("Pasta")
-                    .mealDescription("A delicious pasta")
-                    .mealInstructions("Eat it")
-                    .mealPrepTime(15)
-                    .mealRating(4.6)
-                    .build();
-            em.getTransaction().begin();
-            em.persist(m1);
-            em.persist(m2);
-            em.persist(m3);
-            em.getTransaction().commit();
-        }
+        Meal m1 = Meal.builder()
+                .mealName("Burger")
+                .mealDescription("A delicious burger")
+                .mealInstructions("Eat it")
+                .mealPrepTime(10)
+                .mealRating(4.5)
+                .build();
+        Meal m2 = Meal.builder()
+                .mealName("Pizza")
+                .mealDescription("A delicious pizza")
+                .mealInstructions("Eat it")
+                .mealPrepTime(20)
+                .mealRating(4.7)
+                .build();
+        Meal m3 = Meal.builder()
+                .mealName("Pasta")
+                .mealDescription("A delicious pasta")
+                .mealInstructions("Eat it")
+                .mealPrepTime(15)
+                .mealRating(4.6)
+                .build();
+
+        MealDTO mDTO1 = new MealDTO(m1);
+        MealDTO mDTO2 = new MealDTO(m2);
+        MealDTO mDTO3 = new MealDTO(m3);
+
+        mealDAO.create(mDTO1);
+        mealDAO.create(mDTO2);
+        mealDAO.create(mDTO3);
     }
+
 
     public void clearDatabase() {
         try (EntityManager em = emf.createEntityManager()) {
