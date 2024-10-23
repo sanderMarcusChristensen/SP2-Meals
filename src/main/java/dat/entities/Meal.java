@@ -1,5 +1,6 @@
 package dat.entities;
 
+import dat.dtos.IngredientsDTO;
 import dat.dtos.MealDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,7 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -50,12 +53,13 @@ public class Meal {
     )
     private List<Ingredients> ingredients;
 
-    public Meal(String mealName, String mealDescription, String mealInstructions, double mealPrepTime, double mealRating) {
+    public Meal(String mealName, String mealDescription, String mealInstructions, double mealPrepTime, double mealRating, List<Ingredients> ingredients) {
         this.mealName = mealName;
         this.mealDescription = mealDescription;
         this.mealInstructions = mealInstructions;
         this.mealPrepTime = mealPrepTime;
         this.mealRating = mealRating;
+        this.ingredients = ingredients;
     }
 
     public Meal(MealDTO mealDTO) {
@@ -66,7 +70,24 @@ public class Meal {
         this.mealPrepTime = mealDTO.getMealPrepTime();
         this.mealRating = mealDTO.getMealRating();
 
+        if(mealDTO.getIngredients() != null) {
+            this.ingredients = mealDTO.getIngredients().stream()
+                    .map(Ingredients::new)
+                    .collect(Collectors.toList());
+        }
+
     }
 
-    //Add equals and hashCode methods
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Meal meal = (Meal) o;
+        return Double.compare(mealPrepTime, meal.mealPrepTime) == 0 && Double.compare(mealRating, meal.mealRating) == 0 && Objects.equals(mealId, meal.mealId) && Objects.equals(mealName, meal.mealName) && Objects.equals(mealDescription, meal.mealDescription) && Objects.equals(mealInstructions, meal.mealInstructions) && Objects.equals(ingredients, meal.ingredients);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mealId, mealName, mealDescription, mealInstructions, mealPrepTime, mealRating, ingredients);
+    }
 }
