@@ -12,11 +12,8 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 import static io.javalin.apibuilder.ApiBuilder.delete;
 
 public class IngredientsRoute {
-    //private final IngredientsController ingredientsController = new IngredientsController();
 
-    private final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("meals");
-    private final IngredientsDAO dao = new IngredientsDAO(emf);
-    private final IngredientsController ingredientsController = new IngredientsController(dao);
+    private final IngredientsController ingredientsController = new IngredientsController();
 
     protected EndpointGroup getIngredientsRoutes() {
         return () -> {
@@ -26,6 +23,8 @@ public class IngredientsRoute {
             get("/{id}", ingredientsController::read, Role.ANYONE);
             put("/{id}", ingredientsController::update, Role.ANYONE);
             delete("/{id}", ingredientsController::delete, Role.ANYONE);
+
+
 
 
         };

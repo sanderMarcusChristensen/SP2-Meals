@@ -1,19 +1,20 @@
 package dat.entities;
 
+import dat.dtos.IngredientsDTO;
 import dat.dtos.MealDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "meal")
 public class Meal {
 
@@ -59,14 +60,33 @@ public class Meal {
     }
 
     public Meal(MealDTO mealDTO) {
-        this.mealId = mealDTO.getId();
+        this.mealId = mealDTO.getMealId();
         this.mealName = mealDTO.getMealName();
         this.mealDescription = mealDTO.getMealDescription();
         this.mealInstructions = mealDTO.getMealInstructions();
         this.mealPrepTime = mealDTO.getMealPrepTime();
         this.mealRating = mealDTO.getMealRating();
 
+        if(mealDTO.getIngredients() != null) {
+            this.ingredients = mealDTO.getIngredients().stream()
+                    .map(Ingredients::new)
+                    .collect(Collectors.toList());
+        }
     }
 
-    //Add equals and hashCode methods
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Meal meal = (Meal) o;
+        return Double.compare(mealPrepTime, meal.mealPrepTime) == 0 && Double.compare(mealRating, meal.mealRating) == 0 && Objects.equals(mealId, meal.mealId) && Objects.equals(mealName, meal.mealName) && Objects.equals(mealDescription, meal.mealDescription) && Objects.equals(mealInstructions, meal.mealInstructions) && Objects.equals(ingredients, meal.ingredients);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mealId, mealName, mealDescription, mealInstructions, mealPrepTime, mealRating, ingredients);
+    }
+    public static List<Meal> toMealList(List<MealDTO> mealDTOS) {
+        return mealDTOS.stream().map(Meal::new).collect(Collectors.toList());
+    }
 }

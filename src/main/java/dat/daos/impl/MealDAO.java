@@ -6,11 +6,12 @@ import dat.entities.Meal;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class MealDAO implements IDAO<MealDTO, Integer> {
 
     private static MealDAO instance;
@@ -53,6 +54,13 @@ public class MealDAO implements IDAO<MealDTO, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Meal meal = new Meal(mealDTO);
+
+            if (meal.getIngredients() != null && !meal.getIngredients().isEmpty()) {
+                em.persist(meal);
+            } else {
+                throw new IllegalArgumentException("Meal must have ingredients.");
+            }
+
             em.persist(meal);
             em.getTransaction().commit();
             return new MealDTO(meal);

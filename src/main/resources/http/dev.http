@@ -52,10 +52,11 @@ GET {{url}}/meals
 
 ###
 
-GET {{url}}/meals/1
+GET {{url}}/meals/7
 
 ###
 
+#virker men skal lige kigges på
 POST {{url}}/meals
 Content-Type: application/json
 Accept: application/json
@@ -66,8 +67,18 @@ Authorization: Bearer {{jwt_token}}
   "mealDescription": "Indian/Pakistani",
   "mealInstructions": "Instruction to cook: ......",
   "mealPrepTime": 30,
-  "mealRating": 4.9
+  "mealRating": 4.9,
+  "ingredients" : [{
+    "name": "Chicken",
+    "quantity": "500g"
+  },
+  {
+    "name": "Butter",
+    "quantity": "100g"
+  }]
+
 }
+
 
 ###
 
@@ -87,7 +98,7 @@ GET {{url}}/meals/prepTime/30
 
 ###
 
-DELETE {{url}}/meals/5
+DELETE {{url}}/meals/7
 
 
 ### --------------------  Ingredients ENDPOINTS  ------------------------------

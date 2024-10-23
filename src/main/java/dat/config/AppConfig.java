@@ -37,7 +37,7 @@ public class AppConfig {
         config.router.apiBuilder(SecurityRoutes.getSecuredRoutes());  // protected test routes
     }
 
-    public static void startServer() {
+    public static Javalin startServer() {
         Javalin app = Javalin.create(AppConfig::configuration);
 
         app.beforeMatched(ctx -> { // Before matched is different from before, in that it is not called for 404 etc.
@@ -65,6 +65,7 @@ public class AppConfig {
 
         app.start(ApiProperties.PORT);
         exceptionContext(app);
+        return app;
     }
 
     public static void exceptionContext(Javalin app) {
@@ -77,5 +78,9 @@ public class AppConfig {
             ctx.status(400);
             ctx.result(e.getMessage());
         });
+    }
+
+    public static void stopServer(Javalin app) {
+        app.stop();
     }
 }
