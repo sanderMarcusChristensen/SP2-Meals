@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
@@ -34,17 +35,29 @@ public class MealDTO {
         }
     }
 
-    public MealDTO(String mealName, String mealDescription, String mealInstructions, double mealPrepTime, double mealRating) {
+    public MealDTO(String mealName, String mealDescription, String mealInstructions, double mealPrepTime, double mealRating, List<IngredientsDTO> ingredients) {
         this.mealName = mealName;
         this.mealDescription = mealDescription;
         this.mealInstructions = mealInstructions;
         this.mealPrepTime = mealPrepTime;
         this.mealRating = mealRating;
+        this.ingredients = ingredients;
     }
 
     public static List<MealDTO> toMealDTOList(List<Meal> meals) {
         return meals.stream().map(MealDTO::new).collect(Collectors.toList());
     }
 
-    //Add equals and hashCode methods
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MealDTO mealDTO = (MealDTO) o;
+        return Double.compare(mealPrepTime, mealDTO.mealPrepTime) == 0 && Double.compare(mealRating, mealDTO.mealRating) == 0 && Objects.equals(id, mealDTO.id) && Objects.equals(mealName, mealDTO.mealName) && Objects.equals(mealDescription, mealDTO.mealDescription) && Objects.equals(mealInstructions, mealDTO.mealInstructions) && Objects.equals(ingredients, mealDTO.ingredients);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, mealName, mealDescription, mealInstructions, mealPrepTime, mealRating, ingredients);
+    }
 }
