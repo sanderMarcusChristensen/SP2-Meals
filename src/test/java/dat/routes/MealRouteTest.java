@@ -62,16 +62,16 @@ class MealRouteTest {
     @Test
     @DisplayName("Test get all meals")
     void getAllMeals() {
-        Meal[] meals =
+        Meal[] mealsRequest =
                 given()
                         .when()
-                        .get(BASE_URL+"/meals")
+                        .get(BASE_URL + "/meals")
                         .then()
                         .log().all()
                         .statusCode(200)
                         .extract()
                         .as(Meal[].class);
-        assertThat(meals, arrayContainingInAnyOrder(m1, m2, m3));
+        assertThat(mealsRequest, arrayContainingInAnyOrder(m1, m2, m3));
     }
 
     @Test
@@ -126,5 +126,51 @@ class MealRouteTest {
                         .extract()
                         .as(Meal.class);
         assertThat(meal.getMealName(), equalTo(mealDTO.getMealName()));
+    }
+
+    @Test
+    @DisplayName("Test get max prep time")
+    void getMaxPrepTime() {
+        Meal[] mealsRequest =
+                given()
+                        .when()
+                        .get(BASE_URL + "/meals/prepTime/15")
+                        .then()
+                        .log().all()
+                        .statusCode(200)
+                        .extract()
+                        .as(Meal[].class);
+        assertThat(mealsRequest, arrayWithSize(2));
+        assertThat(mealsRequest, arrayContainingInAnyOrder(m1, m2));
+        for (Meal meal : mealsRequest) {
+            assertThat(meal.getMealPrepTime(), lessThanOrEqualTo(15.0));
+        }
+    }
+
+    @Test
+    @DisplayName("Test delete meal")
+    void deleteMeal() {
+        given()
+                .when()
+                .get(BASE_URL + "/meals/" + m1.getMealId())
+                .then()
+                .log().all()
+                .statusCode(200);
+        assertThat(meals, hasItem(m1));
+
+        //First deletion succeed
+        given()
+                .when()
+                .delete(BASE_URL + "/meals/" + m1.getMealId())
+                .then()
+                .statusCode(204);
+
+        //Try to get the deleted meal but fails with error 400 because it does not exist
+        given()
+                .when()
+                .get(BASE_URL + "/meals/" + m1.getMealId())
+                .then()
+                .log().all()
+                .statusCode(400);
     }
 }

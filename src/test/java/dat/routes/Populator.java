@@ -27,7 +27,7 @@ public class Populator {
                 .mealDescription("A delicious burger")
                 .mealInstructions("Grill beef, assemble burger")
                 .mealPrepTime(10)
-                .mealRating(4.5)
+                .mealRating(3.1)
                 .build();
         m1.setIngredients(List.of(
                 new Ingredients("Bun", "1"),
@@ -40,8 +40,8 @@ public class Populator {
                 .mealName("Pizza")
                 .mealDescription("A delicious pizza")
                 .mealInstructions("Make dough, bake pizza")
-                .mealPrepTime(20)
-                .mealRating(4.7)
+                .mealPrepTime(15)
+                .mealRating(4.1)
                 .build();
         m2.setIngredients(List.of(
                 new Ingredients("Pizza dough", "1 ball"),
@@ -54,8 +54,8 @@ public class Populator {
                 .mealName("Pasta")
                 .mealDescription("A delicious pasta")
                 .mealInstructions("Cook pasta, mix with sauce")
-                .mealPrepTime(15)
-                .mealRating(4.6)
+                .mealPrepTime(20)
+                .mealRating(5.1)
                 .build();
         m3.setIngredients(List.of(
                 new Ingredients("Spaghetti", "200g"),
