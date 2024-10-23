@@ -107,9 +107,13 @@ GET http://localhost:7007/api/ingredients/1
 
 PUT http://localhost:7007/api/ingredients/2
 Content-Type: application/json
-Authorization: Bearer {{dev}}
+Authorization: Bearer {{jwt_token}}
 
 {
   "name": "Pepper",
   "quantity": "0,5 cups"
 }
+
+###
+
+DELETE http://localhost:7007/api/ingredients/1

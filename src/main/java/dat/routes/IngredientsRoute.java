@@ -24,8 +24,8 @@ public class IngredientsRoute {
             post("/", ingredientsController::create, Role.ANYONE);
             get("/", ingredientsController::readAll, Role.ANYONE);
             get("/{id}", ingredientsController::read, Role.ANYONE);
-            put("/{id}", ingredientsController::update, Role.ADMIN);
-            delete("/{id}", ingredientsController::delete, Role.ADMIN);
+            put("/{id}", ingredientsController::update, Role.ANYONE);
+            delete("/{id}", ingredientsController::delete, Role.ANYONE);
 
 
         };
