@@ -46,7 +46,7 @@ Accept: application/json
 Authorization: Bearer {{jwt_token}}
 
 
-### ------------   Meals API   ------------
+### -----------------   Meals API   -----------------
 
 GET {{url}}/meals
 
