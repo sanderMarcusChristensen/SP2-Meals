@@ -45,6 +45,13 @@ public class MealDAO implements IDAO<MealDTO, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Meal meal = new Meal(mealDTO);
+
+            if (meal.getIngredients() != null && !meal.getIngredients().isEmpty()) {
+                em.persist(meal);
+            } else {
+                throw new IllegalArgumentException("Meal must have ingredients.");
+            }
+
             em.persist(meal);
             em.getTransaction().commit();
             return new MealDTO(meal);
