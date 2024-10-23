@@ -60,6 +60,7 @@ GET {{url}}/meals/1
 
 ###
 
+#virker men skal lige kigges på
 POST {{url}}/meals
 Content-Type: application/json
 Accept: application/json
@@ -70,8 +71,11 @@ Authorization: Bearer {{jwt_token}}
   "mealDescription": "Indian/Pakistani",
   "mealInstructions": "Instruction to cook: ......",
   "mealPrepTime": 30,
-  "mealRating": 4.9
+  "mealRating": 4.9,
+  "ingredients" : [{}]
+
 }
+
 
 ###
 
@@ -116,4 +120,4 @@ Authorization: Bearer {{jwt_token}}
 
 ###
 
-DELETE http://localhost:7007/api/ingredients/1
+DELETE http://localhost:7007/api/ingredients/31
