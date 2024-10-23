@@ -96,7 +96,7 @@ Authorization: Bearer {{dev}}
 
 {
   "name": "Pepper",
-  "quantity": "5000000000"
+  "quantity": "5000"
 }
 
 ###
@@ -104,3 +104,12 @@ Authorization: Bearer {{dev}}
 GET http://localhost:7007/api/ingredients/1
 
 ###
+
+PUT http://localhost:7007/api/ingredients/2
+Content-Type: application/json
+Authorization: Bearer {{dev}}
+
+{
+  "name": "Pepper",
+  "quantity": "0,5 cups"
+}
