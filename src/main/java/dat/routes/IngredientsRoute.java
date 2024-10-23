@@ -12,7 +12,7 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 import static io.javalin.apibuilder.ApiBuilder.delete;
 
 public class IngredientsRoute {
-
+    //private final IngredientsController ingredientsController = new IngredientsController();
 
     private final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("meals");
     private final IngredientsDAO dao = new IngredientsDAO(emf);

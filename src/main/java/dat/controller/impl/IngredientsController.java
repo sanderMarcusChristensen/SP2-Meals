@@ -9,8 +9,9 @@ import io.javalin.http.Context;
 import java.util.List;
 
 public class IngredientsController implements IController<IngredientsDTO,Integer> {
+    private final IngredientsDAO dao;
 
-    private IngredientsDAO dao;
+    //private IngredientsDAO dao;
 
     public IngredientsController(IngredientsDAO dao) {
         this.dao = dao;
@@ -37,8 +38,11 @@ public class IngredientsController implements IController<IngredientsDTO,Integer
 
     @Override
     public void readAll(Context ctx) {
-
-
+        // List of DTOS
+        List<IngredientsDTO> ingredientsDTOS = dao.readAll();
+        // Response
+        ctx.res().setStatus(200);
+        ctx.json(ingredientsDTOS);
     }
 
     @Override
