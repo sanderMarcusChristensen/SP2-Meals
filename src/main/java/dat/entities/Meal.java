@@ -2,17 +2,17 @@ package dat.entities;
 
 import dat.dtos.MealDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "meal")
 public class Meal {
 
@@ -57,6 +57,10 @@ public class Meal {
         this.mealPrepTime = mealDTO.getMealPrepTime();
         this.mealRating = mealDTO.getMealRating();
 
+    }
+
+    public static List<Meal> toMealList(List<MealDTO> mealDTOS) {
+        return mealDTOS.stream().map(Meal::new).collect(Collectors.toList());
     }
 
     //Add equals and hashCode methods
