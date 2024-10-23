@@ -64,7 +64,21 @@ public class MealController implements IController<MealDTO, Integer> {
 
     @Override
     public void delete(Context ctx) {
+        //reponse
+        int id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
+        dao.delete(id);
+        // status
+        ctx.res().setStatus(204);
+    }
 
+    public void maxPrepTime(Context ctx){
+        //request
+        int maxPrepTime = ctx.pathParamAsClass("time", Integer.class).check(m -> m > 0, "Max prep time must be greater than 0").get();
+        // DTO
+        List<MealDTO> mealDTOS = dao.maxPrepTime(maxPrepTime);
+        //response
+        ctx.res().setStatus(200);
+        ctx.json(mealDTOS, MealDTO.class);
     }
 
     @Override

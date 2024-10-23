@@ -45,12 +45,8 @@ Authorization: Bearer {{jwt_token}}
 Accept: application/json
 Authorization: Bearer {{jwt_token}}
 
-###
 
-
-
-#------------------------------ MEALS ENDPOINTS------------------------------
-
+### -----------------   Meals API   -----------------
 
 GET {{url}}/meals
 
@@ -91,8 +87,14 @@ Authorization: Bearer {{jwt_token}}
 
 ###
 
-# ------------------------------ Ingredients ENDPOINTS------------------------------
+GET {{url}}/meals/prepTime/30
 
+###
+
+DELETE {{url}}/meals/5
+
+
+### --------------------  Ingredients ENDPOINTS  ------------------------------
 
 POST http://localhost:7007/api/ingredients
 Content-Type: application/json
@@ -123,4 +125,4 @@ Authorization: Bearer {{jwt_token}}
 
 ###
 
-DELETE http://localhost:7007/api/ingredients/31
+DELETE http://localhost:7007/api/ingredients/1
