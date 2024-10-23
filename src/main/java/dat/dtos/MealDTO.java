@@ -17,6 +17,7 @@ public class MealDTO {
     private double mealPrepTime;
     private double mealRating;
 
+    @Setter
     private List<IngredientsDTO> ingredients;
 
     public MealDTO(Meal meal) {
@@ -34,7 +35,16 @@ public class MealDTO {
         }
     }
 
-    public MealDTO(String mealName, String mealDescription, String mealInstructions, double mealPrepTime, double mealRating, List<IngredientsDTO> ingredients) {
+    public MealDTO(String mealName, String mealDescription, String mealInstructions, double mealPrepTime, double mealRating) {
+        this.mealName = mealName;
+        this.mealDescription = mealDescription;
+        this.mealInstructions = mealInstructions;
+        this.mealPrepTime = mealPrepTime;
+        this.mealRating = mealRating;
+    }
+
+    public MealDTO(Integer mealId, String mealName, String mealDescription, String mealInstructions, double mealPrepTime, double mealRating, List<IngredientsDTO> ingredients) {
+        this.mealId = mealId;
         this.mealName = mealName;
         this.mealDescription = mealDescription;
         this.mealInstructions = mealInstructions;
@@ -52,11 +62,11 @@ public class MealDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MealDTO mealDTO = (MealDTO) o;
-        return Double.compare(mealPrepTime, mealDTO.mealPrepTime) == 0 && Double.compare(mealRating, mealDTO.mealRating) == 0 && Objects.equals(id, mealDTO.id) && Objects.equals(mealName, mealDTO.mealName) && Objects.equals(mealDescription, mealDTO.mealDescription) && Objects.equals(mealInstructions, mealDTO.mealInstructions) && Objects.equals(ingredients, mealDTO.ingredients);
+        return Double.compare(mealPrepTime, mealDTO.mealPrepTime) == 0 && Double.compare(mealRating, mealDTO.mealRating) == 0 && Objects.equals(mealId, mealDTO.mealId) && Objects.equals(mealName, mealDTO.mealName) && Objects.equals(mealDescription, mealDTO.mealDescription) && Objects.equals(mealInstructions, mealDTO.mealInstructions) && Objects.equals(ingredients, mealDTO.ingredients);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, mealName, mealDescription, mealInstructions, mealPrepTime, mealRating, ingredients);
+        return Objects.hash(mealId, mealName, mealDescription, mealInstructions, mealPrepTime, mealRating, ingredients);
     }
 }

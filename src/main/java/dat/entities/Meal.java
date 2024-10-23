@@ -51,13 +51,12 @@ public class Meal {
     )
     private List<Ingredients> ingredients;
 
-    public Meal(String mealName, String mealDescription, String mealInstructions, double mealPrepTime, double mealRating, List<Ingredients> ingredients) {
+    public Meal(String mealName, String mealDescription, String mealInstructions, double mealPrepTime, double mealRating) {
         this.mealName = mealName;
         this.mealDescription = mealDescription;
         this.mealInstructions = mealInstructions;
         this.mealPrepTime = mealPrepTime;
         this.mealRating = mealRating;
-        this.ingredients = ingredients;
     }
 
     public Meal(MealDTO mealDTO) {

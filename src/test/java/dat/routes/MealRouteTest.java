@@ -3,6 +3,7 @@ package dat.routes;
 import dat.config.AppConfig;
 import dat.config.HibernateConfig;
 import dat.daos.impl.MealDAO;
+import dat.dtos.IngredientsDTO;
 import dat.dtos.MealDTO;
 import dat.entities.Meal;
 import dat.util.ApiProperties;
@@ -92,6 +93,7 @@ class MealRouteTest {
     @DisplayName("Test create meal")
     void createMeal() {
         MealDTO mealDTO = new MealDTO("Sushi", "A delicious sushi", "Eat it", 30, 4.8);
+        mealDTO.setIngredients(List.of(new IngredientsDTO("Rice", "200g"), new IngredientsDTO("Salmon", "100g")));
         Meal meal =
                 given()
                         .contentType("application/json")
@@ -111,6 +113,7 @@ class MealRouteTest {
     void updateMeal() {
         assertThat(m1.getMealName(), equalTo("Burger"));
         MealDTO mealDTO = new MealDTO("Sushi", "A delicious sushi", "Eat it", 30, 4.8);
+        mealDTO.setIngredients(List.of(new IngredientsDTO("Rice", "200g"), new IngredientsDTO("Salmon", "100g")));
         Meal meal =
                 given()
                         .contentType("application/json")

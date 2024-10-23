@@ -19,8 +19,7 @@ public class IngredientsDTO {
         this.quantity = ingredients.getQuantity();
     }
 
-    public IngredientsDTO(Integer id, String name, String quantity) {
-        this.id = id;
+    public IngredientsDTO(String name, String quantity) {
         this.name = name;
         this.quantity = quantity;
     }

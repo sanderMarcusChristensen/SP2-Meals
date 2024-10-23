@@ -2,9 +2,13 @@ package dat.routes;
 
 import dat.daos.impl.MealDAO;
 import dat.dtos.MealDTO;
+import dat.entities.Ingredients;
 import dat.entities.Meal;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Populator {
 
@@ -17,27 +21,47 @@ public class Populator {
     }
 
     public void populateDatabase() {
+        // Burger
         Meal m1 = Meal.builder()
                 .mealName("Burger")
                 .mealDescription("A delicious burger")
-                .mealInstructions("Eat it")
+                .mealInstructions("Grill beef, assemble burger")
                 .mealPrepTime(10)
                 .mealRating(4.5)
                 .build();
+        m1.setIngredients(List.of(
+                new Ingredients("Bun", "1"),
+                new Ingredients("Beef patty", "150g"),
+                new Ingredients("Cheddar cheese", "1 slice")
+        ));
+
+        // Pizza
         Meal m2 = Meal.builder()
                 .mealName("Pizza")
                 .mealDescription("A delicious pizza")
-                .mealInstructions("Eat it")
+                .mealInstructions("Make dough, bake pizza")
                 .mealPrepTime(20)
                 .mealRating(4.7)
                 .build();
+        m2.setIngredients(List.of(
+                new Ingredients("Pizza dough", "1 ball"),
+                new Ingredients("Tomato sauce", "100ml"),
+                new Ingredients("Mozzarella cheese", "100g")
+        ));
+
+
         Meal m3 = Meal.builder()
                 .mealName("Pasta")
                 .mealDescription("A delicious pasta")
-                .mealInstructions("Eat it")
+                .mealInstructions("Cook pasta, mix with sauce")
                 .mealPrepTime(15)
                 .mealRating(4.6)
                 .build();
+        m3.setIngredients(List.of(
+                new Ingredients("Spaghetti", "200g"),
+                new Ingredients("Tomato sauce", "100ml"),
+                new Ingredients("Parmesan cheese", "50g")
+        ));
 
         MealDTO mDTO1 = new MealDTO(m1);
         MealDTO mDTO2 = new MealDTO(m2);
@@ -53,7 +77,9 @@ public class Populator {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.createQuery("DELETE FROM Meal").executeUpdate();
+            em.createQuery("DELETE FROM Ingredients").executeUpdate();
             em.createNativeQuery("ALTER SEQUENCE meal_meal_id_seq RESTART WITH 1").executeUpdate();
+            em.createNativeQuery("ALTER SEQUENCE ingredients_id_seq RESTART WITH 1").executeUpdate();
             em.getTransaction().commit();
         }
     }

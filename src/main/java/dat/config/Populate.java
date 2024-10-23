@@ -41,7 +41,8 @@ public class Populate {
         ingredients1.add(new Ingredients("Tomato sauce", "200ml"));
         ingredients1.add(new Ingredients("Onion", "1 medium"));
         ingredients1.add(new Ingredients("Garlic", "2 cloves"));
-        Meal meal1 = new Meal("Spaghetti Bolognese", "Classic Italian pasta with meat sauce", "Cook pasta, prepare sauce", 45.0, 4.5, ingredients1);
+        Meal meal1 = new Meal("Spaghetti Bolognese", "Classic Italian pasta with meat sauce", "Cook pasta, prepare sauce", 45.0, 4.5);
+        meal1.setIngredients(ingredients1);
 
         // Chicken Caesar Salad
         List<Ingredients> ingredients2 = new ArrayList<>();
@@ -50,7 +51,8 @@ public class Populate {
         ingredients2.add(new Ingredients("Caesar dressing", "100ml"));
         ingredients2.add(new Ingredients("Parmesan cheese", "50g"));
         ingredients2.add(new Ingredients("Croutons", "50g"));
-        Meal meal2 = new Meal("Chicken Caesar Salad", "Salad with grilled chicken and Caesar dressing", "Grill chicken, toss salad", 25.0, 4.2, ingredients2);
+        Meal meal2 = new Meal("Chicken Caesar Salad", "Salad with grilled chicken and Caesar dressing", "Grill chicken, toss salad", 25.0, 4.2);
+        meal2.setIngredients(ingredients2);
 
         // Beef Stroganoff
         List<Ingredients> ingredients3 = new ArrayList<>();
@@ -59,7 +61,8 @@ public class Populate {
         ingredients3.add(new Ingredients("Onion", "1 medium"));
         ingredients3.add(new Ingredients("Sour cream", "100ml"));
         ingredients3.add(new Ingredients("Butter", "2 tbsp"));
-        Meal meal3 = new Meal("Beef Stroganoff", "Beef in a creamy mushroom sauce", "Cook beef, make sauce", 50.0, 4.8, ingredients3);
+        Meal meal3 = new Meal("Beef Stroganoff", "Beef in a creamy mushroom sauce", "Cook beef, make sauce", 50.0, 4.8);
+        meal3.setIngredients(ingredients3);
 
         // Vegetable Stir-fry
         List<Ingredients> ingredients4 = new ArrayList<>();
@@ -68,7 +71,8 @@ public class Populate {
         ingredients4.add(new Ingredients("Bell pepper", "1 medium"));
         ingredients4.add(new Ingredients("Soy sauce", "50ml"));
         ingredients4.add(new Ingredients("Garlic", "2 cloves"));
-        Meal meal4 = new Meal("Vegetable Stir-fry", "Mixed vegetables stir-fried with soy sauce", "Chop veggies, stir-fry", 30.0, 4.3, ingredients4);
+        Meal meal4 = new Meal("Vegetable Stir-fry", "Mixed vegetables stir-fried with soy sauce", "Chop veggies, stir-fry", 30.0, 4.3);
+        meal4.setIngredients(ingredients4);
 
         // Margherita Pizza
         List<Ingredients> ingredients5 = new ArrayList<>();
@@ -77,7 +81,8 @@ public class Populate {
         ingredients5.add(new Ingredients("Mozzarella cheese", "150g"));
         ingredients5.add(new Ingredients("Fresh basil", "10 leaves"));
         ingredients5.add(new Ingredients("Olive oil", "2 tbsp"));
-        Meal meal5 = new Meal("Margherita Pizza", "Classic pizza with tomato, mozzarella, and basil", "Make dough, bake pizza", 60.0, 4.7, ingredients5);
+        Meal meal5 = new Meal("Margherita Pizza", "Classic pizza with tomato, mozzarella, and basil", "Make dough, bake pizza", 60.0, 4.7);
+        meal5.setIngredients(ingredients5);
 
         // Chocolate Cake
         List<Ingredients> ingredients6 = new ArrayList<>();
@@ -86,7 +91,8 @@ public class Populate {
         ingredients6.add(new Ingredients("Sugar", "200g"));
         ingredients6.add(new Ingredients("Butter", "100g"));
         ingredients6.add(new Ingredients("Eggs", "2 large"));
-        Meal meal6 = new Meal("Chocolate Cake", "Rich chocolate dessert", "Bake cake, prepare frosting", 90.0, 4.9, ingredients6);
+        Meal meal6 = new Meal("Chocolate Cake", "Rich chocolate dessert", "Bake cake, prepare frosting", 90.0, 4.9);
+        meal6.setIngredients(ingredients6);
 
         // Returning all meals as a set
         Set<Meal> mealSet = new HashSet<>();
