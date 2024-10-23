@@ -2,6 +2,7 @@ package dat.config;
 
 
 
+import dat.entities.Ingredients;
 import dat.entities.Meal;
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.SessionFactory;
@@ -49,8 +50,8 @@ public class HibernateConfig {
 
     // TODO: IMPORTANT: Add Entity classes here for them to be registered with Hibernate
     private static void getAnnotationConfiguration(Configuration configuration) {
-        //configuration.addAnnotatedClass(Hotel.class);
         configuration.addAnnotatedClass(Meal.class);
+        configuration.addAnnotatedClass(Ingredients.class);
     }
 
     private static EntityManagerFactory createEMF(boolean forTest, String DBName) {

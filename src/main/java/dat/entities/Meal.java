@@ -7,11 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+import java.util.Set;
+
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "meals")
+@Table(name = "meal")
 public class Meal {
 
     @Id
@@ -38,6 +41,14 @@ public class Meal {
     @Setter
     @Column(name = "meal_rating", nullable = false)
     private double mealRating;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "meal_ingredients",
+            joinColumns = @JoinColumn(name = "meal_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id")
+    )
+    private List<Ingredients> ingredients;
 
     public Meal(String mealName, String mealDescription, String mealInstructions, double mealPrepTime, double mealRating) {
         this.mealName = mealName;

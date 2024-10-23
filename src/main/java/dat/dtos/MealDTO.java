@@ -17,6 +17,8 @@ public class MealDTO {
     private double mealPrepTime;
     private double mealRating;
 
+    private List<IngredientsDTO> ingredients;
+
     public MealDTO(Meal meal) {
         this.id = meal.getMealId();
         this.mealName = meal.getMealName();
@@ -24,6 +26,12 @@ public class MealDTO {
         this.mealInstructions = meal.getMealInstructions();
         this.mealPrepTime = meal.getMealPrepTime();
         this.mealRating = meal.getMealRating();
+
+        if(meal.getIngredients() != null) {
+            this.ingredients = meal.getIngredients().stream()
+                    .map(IngredientsDTO::new)
+                    .collect(Collectors.toList());
+        }
     }
 
     public MealDTO(String mealName, String mealDescription, String mealInstructions, double mealPrepTime, double mealRating) {

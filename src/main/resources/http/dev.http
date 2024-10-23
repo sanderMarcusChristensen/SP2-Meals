@@ -1,3 +1,5 @@
+
+# ------------------------------ Security ENDPOINTS------------------------------
 ### A simple get request to the test endpoint. No need for login
 GET {{url}}/auth/test/
 
@@ -81,8 +83,42 @@ Authorization: Bearer {{jwt_token}}
 
 ###
 
-DELETE {{url}}/meals/5
+GET {{url}}/meals/prepTime/30
 
 ###
 
-GET {{url}}/meals/prepTime/30
+DELETE {{url}}/meals/5
+
+
+### --------------------  Ingredients ENDPOINTS  ------------------------------
+
+POST http://localhost:7007/api/ingredients
+Content-Type: application/json
+
+{
+  "name": "Salt",
+  "quantity": "Some salt"
+}
+
+###
+
+GET http://localhost:7007/api/ingredients/1
+
+###
+
+GET http://localhost:7007/api/ingredients
+
+###
+
+PUT http://localhost:7007/api/ingredients/2
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "name": "Pepper",
+  "quantity": "0,5 cups"
+}
+
+###
+
+DELETE http://localhost:7007/api/ingredients/1
