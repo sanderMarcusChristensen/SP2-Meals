@@ -13,7 +13,7 @@ public class Routes {
 
         return () -> {
             path("/meals", mealRoutes.getMealRoutes());
-            path("ingredients", ingredientsRoutes.getIngredientsRoutes());
+            path("/ingredients", ingredientsRoutes.getIngredientsRoutes());
         };
     }
 }
