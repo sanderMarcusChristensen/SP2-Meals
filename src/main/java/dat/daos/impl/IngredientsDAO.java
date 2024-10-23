@@ -6,17 +6,25 @@ import dat.entities.Ingredients;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class IngredientsDAO implements IDAO<IngredientsDTO,Integer> {
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+public class IngredientsDAO implements IDAO<IngredientsDTO, Integer> {
 
-    private final EntityManagerFactory emf;
+    private static IngredientsDAO instance;
+    private static EntityManagerFactory emf;
 
-    public IngredientsDAO(EntityManagerFactory emf) {
-        this.emf = emf;
+    public static IngredientsDAO getInstance(EntityManagerFactory _emf) {
+        if (instance == null) {
+            emf = _emf;
+            instance = new IngredientsDAO();
+        }
+        return instance;
     }
 
     @Override

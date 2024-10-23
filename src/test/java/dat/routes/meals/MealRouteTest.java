@@ -1,4 +1,4 @@
-package dat.routes;
+package dat.routes.meals;
 
 import dat.config.AppConfig;
 import dat.config.HibernateConfig;
@@ -6,12 +6,10 @@ import dat.daos.impl.MealDAO;
 import dat.dtos.IngredientsDTO;
 import dat.dtos.MealDTO;
 import dat.entities.Meal;
-import dat.util.ApiProperties;
 import io.javalin.Javalin;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -22,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MealRouteTest {

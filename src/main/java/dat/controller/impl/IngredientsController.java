@@ -1,10 +1,13 @@
 package dat.controller.impl;
 
+import dat.config.HibernateConfig;
 import dat.controller.IController;
 import dat.daos.impl.IngredientsDAO;
+import dat.daos.impl.MealDAO;
 import dat.dtos.IngredientsDTO;
 import dat.exceptions.ApiException;
 import io.javalin.http.Context;
+import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
 
@@ -13,8 +16,9 @@ public class IngredientsController implements IController<IngredientsDTO,Integer
 
     //private IngredientsDAO dao;
 
-    public IngredientsController(IngredientsDAO dao) {
-        this.dao = dao;
+    public IngredientsController() {
+        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("meals");
+        this.dao = IngredientsDAO.getInstance(emf);
     }
 
 

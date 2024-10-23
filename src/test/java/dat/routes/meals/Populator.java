@@ -1,4 +1,4 @@
-package dat.routes;
+package dat.routes.meals;
 
 import dat.daos.impl.MealDAO;
 import dat.dtos.MealDTO;
@@ -7,7 +7,6 @@ import dat.entities.Meal;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Populator {
