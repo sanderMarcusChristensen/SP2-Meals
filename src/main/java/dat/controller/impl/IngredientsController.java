@@ -80,8 +80,6 @@ public class IngredientsController implements IController<IngredientsDTO,Integer
         } catch (Exception e) {
             throw new ApiException(500,e.getMessage());
         }
-
-
     }
 
     @Override
