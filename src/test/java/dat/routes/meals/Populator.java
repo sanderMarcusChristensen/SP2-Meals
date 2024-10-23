@@ -71,7 +71,6 @@ public class Populator {
         mealDAO.create(mDTO3);
     }
 
-
     public void clearDatabase() {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
