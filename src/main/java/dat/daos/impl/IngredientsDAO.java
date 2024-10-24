@@ -3,6 +3,8 @@ package dat.daos.impl;
 import dat.daos.IDAO;
 import dat.dtos.IngredientsDTO;
 import dat.entities.Ingredients;
+import dat.entities.Meal;
+import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
@@ -26,6 +28,7 @@ public class IngredientsDAO implements IDAO<IngredientsDTO, Integer> {
         }
         return instance;
     }
+
 
     @Override
     public IngredientsDTO read(Integer integer) {
@@ -104,9 +107,40 @@ public class IngredientsDAO implements IDAO<IngredientsDTO, Integer> {
 
     @Override
     public void delete(Integer id) {
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
 
+        try {
+            // Find the ingredient to delete
+            Ingredients ingredients = em.find(Ingredients.class, id);
 
+            if (ingredients == null) {
+                throw new ApiException(404, "Ingredient not found");
+            }
+
+            // Remove the ingredient from all meals that reference it
+            List<Meal> meals = em.createQuery("SELECT m FROM Meal m JOIN m.ingredients i WHERE i.id = :ingredientId", Meal.class)
+                    .setParameter("ingredientId", id)
+                    .getResultList();
+
+            for (Meal meal : meals) {
+                meal.getIngredients().remove(ingredients);
+                em.merge(meal); // Update the meal in the database
+            }
+
+            // Now remove the ingredient
+            em.remove(ingredients);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback(); // Rollback on error
+            e.printStackTrace();
+            throw new ApiException(500, "Something went wrong trying to delete an ingredient");
+        } finally {
+            em.close(); // Ensure entity manager is closed
+        }
     }
+
+
 
     @Override
     public boolean validatePrimaryKey(Integer integer) {
@@ -116,19 +150,5 @@ public class IngredientsDAO implements IDAO<IngredientsDTO, Integer> {
         }
     }
 
-    public IngredientsDTO addCreated(IngredientsDTO dto) {
-
-        Ingredients ingredients = new Ingredients(dto);
-
-
-        try (EntityManager em = emf.createEntityManager()) {
-            em.getTransaction().begin();
-            em.persist(ingredients);
-            em.getTransaction().commit();
-
-            return new IngredientsDTO(ingredients);
-
-        }
-    }
 }
 

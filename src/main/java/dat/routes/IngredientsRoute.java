@@ -24,9 +24,6 @@ public class IngredientsRoute {
             put("/{id}", ingredientsController::update, Role.ANYONE);
             delete("/{id}", ingredientsController::delete, Role.ANYONE);
 
-
-
-
         };
     }
 

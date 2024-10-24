@@ -107,8 +107,8 @@ POST http://localhost:7007/api/ingredients
 Content-Type: application/json
 
 {
-  "name": "Salt",
-  "quantity": "Some salt"
+  "name": "Butter",
+  "quantity": "100g"
 }
 
 ###

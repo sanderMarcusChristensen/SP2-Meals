@@ -1,20 +1,25 @@
 package dat.daos.impl;
 
 import dat.daos.IDAO;
+import dat.dtos.IngredientsDTO;
 import dat.dtos.MealDTO;
+import dat.entities.Ingredients;
 import dat.entities.Meal;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.TypedQuery;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class MealDAO implements IDAO<MealDTO, Integer> {
 
     private static MealDAO instance;
+    private static IngredientsDAO ingredientsDAO;
     private static EntityManagerFactory emf;
 
     public static MealDAO getInstance(EntityManagerFactory _emf) {
@@ -34,6 +39,45 @@ public class MealDAO implements IDAO<MealDTO, Integer> {
     }
 
     @Override
+    public MealDTO create(MealDTO mealDTO) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            Meal meal = new Meal(mealDTO);
+
+            List<Ingredients> ingredientsToAdd = new ArrayList<>();
+            for (IngredientsDTO ingredientDTO : mealDTO.getIngredients()) {
+                Ingredients existingIngredient = findIngredient(em, ingredientDTO);
+                if (existingIngredient != null) {
+                    ingredientsToAdd.add(existingIngredient);
+                } else {
+                    Ingredients newIngredient = new Ingredients();
+                    newIngredient.setName(ingredientDTO.getName());
+                    newIngredient.setQuantity(ingredientDTO.getQuantity());
+                    em.persist(newIngredient);
+                    ingredientsToAdd.add(newIngredient);
+                }
+            }
+
+            meal.setIngredients(ingredientsToAdd);
+            em.persist(meal);
+            em.getTransaction().commit();
+            return new MealDTO(meal);
+            //Catch exceptions
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Ingredients findIngredient(EntityManager em, IngredientsDTO ingredientDTO) {
+        TypedQuery<Ingredients> query = em.createQuery("SELECT i FROM Ingredients i WHERE i.name = :name AND i.quantity = :quantity", Ingredients.class);
+        query.setParameter("name", ingredientDTO.getName());
+        query.setParameter("quantity", ingredientDTO.getQuantity());
+        List<Ingredients> resultList = query.getResultList();
+        return resultList.isEmpty() ? null : resultList.get(0);
+    }
+
+    @Override
     public MealDTO read(Integer integer) {
         try (EntityManager em = emf.createEntityManager()) {
             Meal meal = em.find(Meal.class, integer);
@@ -46,24 +90,6 @@ public class MealDAO implements IDAO<MealDTO, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<MealDTO> query = em.createQuery("SELECT new dat.dtos.MealDTO(m) FROM Meal m", MealDTO.class);
             return query.getResultList();
-        }
-    }
-
-    @Override
-    public MealDTO create(MealDTO mealDTO) {
-        try (EntityManager em = emf.createEntityManager()) {
-            em.getTransaction().begin();
-            Meal meal = new Meal(mealDTO);
-
-            if (meal.getIngredients() != null && !meal.getIngredients().isEmpty()) {
-                em.persist(meal);
-            } else {
-                throw new IllegalArgumentException("Meal must have ingredients.");
-            }
-
-            em.persist(meal);
-            em.getTransaction().commit();
-            return new MealDTO(meal);
         }
     }
 
