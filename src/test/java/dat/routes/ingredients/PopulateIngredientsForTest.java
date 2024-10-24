@@ -34,7 +34,9 @@ public class PopulateIngredientsForTest {
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.createQuery("DELETE FROM Ingredients").executeUpdate();
+            em.createQuery("DELETE FROM Meal").executeUpdate();
             em.createNativeQuery("ALTER SEQUENCE ingredients_id_seq RESTART WITH 1").executeUpdate();
+            em.createNativeQuery("ALTER SEQUENCE meal_meal_id_seq RESTART WITH 1").executeUpdate();
             em.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
