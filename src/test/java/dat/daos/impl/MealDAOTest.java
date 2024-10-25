@@ -1,16 +1,16 @@
 package dat.daos.impl;
 
 import dat.config.HibernateConfig;
+import dat.dtos.IngredientsDTO;
 import dat.dtos.MealDTO;
 import dat.entities.Ingredients;
 import dat.entities.Meal;
+import dat.routes.meals.Populator;
 import org.junit.jupiter.api.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.shaded.org.hamcrest.Matchers;
 
 import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,6 +22,10 @@ class MealDAOTest {
 
     private static EntityManagerFactory emf;
     private static MealDAO mealDAO;
+    private static Populator populator = new Populator(emf, mealDAO);
+
+    private static MealDTO m1, m2, m3;
+    private static List<MealDTO> meals;
 
     private MealDTO mDTO1, mDTO2, mDTO3;
 
@@ -33,7 +37,13 @@ class MealDAOTest {
 
     @BeforeEach
     void setup () {
-
+        /*
+        populator.populateDatabase();
+        meals = mealDAO.readAll(); // Directly assign the list of MealDTOs
+        m1 = meals.get(0);
+        m2 = meals.get(1);
+        m3 = meals.get(2);
+        */
             // Burger
             Meal m1 = Meal.builder()
                     .mealName("Burger")
@@ -94,47 +104,24 @@ class MealDAOTest {
     }
 
     @Test
+    @DisplayName("Test For Create")
     void create() {
-        Meal m4 = Meal.builder()
-                .mealName("Not Pasta")
-                .mealDescription("Not A delicious pasta")
-                .mealInstructions("Cook pasta, mix with sauce")
-                .mealPrepTime(20)
-                .mealRating(5.1)
-                .build();
-        m4.setIngredients(List.of(
-                new Ingredients("Spaghetti", "200g"),
-                new Ingredients("Tomato sauce", "100ml"),
-                new Ingredients("Parmesan cheese", "50g")
-        ));
-        MealDTO mDTO4 = new MealDTO(m4);
+        assertThat(mealDAO.readAll(),hasSize(3));
+        MealDTO m4 = new MealDTO("Tacos", "A delicious taco", "Assemble taco", 30, 4.8);
+        m4.setIngredients(List.of(new IngredientsDTO("Tortilla", "1"), new IngredientsDTO("Beef", "100g")));
+        mealDAO.create(m4);
 
-        MealDTO actual = mealDAO.create(mDTO4);
-        MealDTO expected = mealDAO.read(4);
-
-        assertEquals(expected, actual);
+        assertThat(mealDAO.readAll(), hasSize(4));
     }
-
-
 
     @Test
     @DisplayName("Get Meal By Id")
-    void geyById(){
+    void getById(){
         MealDTO expected = mealDAO.create(mDTO1);
         MealDTO actual = mealDAO.read(expected.getMealId());
 
         assertThat(actual, is(equalTo(expected)));
     }
-
-
-    @Test
-    void readAll() {
-        int actual = mealDAO.readAll().size();
-        int expected = 3;
-
-        assertEquals(expected, actual);
-    }
-
 
     @Test
     @DisplayName("Get All Meals ")
@@ -146,9 +133,17 @@ class MealDAOTest {
         //assertThat(retrievedMeals, containsInAnyOrder(mDTO1, mDTO2, mDTO3));
     }
 
-
     @Test
+    @DisplayName("Test For Update")
     void update() {
+        /*
+        assertThat(mDTO1.getMealName(), is("Burger"));
+        mDTO1.setMealName("Vegan Burger");
+
+        mealDAO.update(mDTO1.getMealId(), mDTO1);
+        assertThat(mealDAO.read(mDTO1.getMealId()).getMealName(), is("Vegan Burger"));
+        */
+
         MealDTO mDTO = mealDAO.read(1);
         Meal newMeal = Meal.builder()
                 .mealName("Vegan Burger")
@@ -166,21 +161,9 @@ class MealDAOTest {
         assertEquals(expected, actual);
     }
 
-
     @Test
+    @DisplayName("Test For Delete")
     void delete() {
-        int numberOf = mealDAO.readAll().size();
-        mealDAO.delete(2);
-
-        int expected = numberOf - 1;
-        int actual = mealDAO.readAll().size();
-
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    @DisplayName("Hamcrest test for delete")
-    void delete2() {
         int numberOf = mealDAO.readAll().size();
         mealDAO.delete(2);
 
@@ -188,7 +171,7 @@ class MealDAOTest {
     }
 
     @Test
-    @DisplayName("Hamcrest test for maxPrepTime")
+    @DisplayName("Test for maxPrepTime")
     void maxPrepTime2() {
         assertThat(mealDAO.maxPrepTime(15), hasSize(2));
     }
