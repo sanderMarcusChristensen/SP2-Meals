@@ -10,10 +10,11 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
+import org.testcontainers.shaded.org.hamcrest.Matchers;
 
 import java.util.List;
-import java.util.Set;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -115,13 +116,14 @@ class MealDAOTest {
     }
 
 
+
     @Test
-    @DisplayName("Get Meal by ID")
-    void read() {
+    @DisplayName("Get Meal By Id")
+    void geyById(){
         MealDTO expected = mealDAO.create(mDTO1);
         MealDTO actual = mealDAO.read(expected.getMealId());
 
-        Assertions.assertEquals(expected, actual);
+        assertThat(actual, is(equalTo(expected)));
     }
 
 
@@ -131,6 +133,17 @@ class MealDAOTest {
         int expected = 3;
 
         assertEquals(expected, actual);
+    }
+
+
+    @Test
+    @DisplayName("Get All Meals ")
+    void getAll(){
+        assertThat(mealDAO.readAll(), hasSize(3));
+        List<MealDTO> retrievedMeals = mealDAO.readAll();
+
+        assertThat(retrievedMeals, hasSize(3));
+        //assertThat(retrievedMeals, containsInAnyOrder(mDTO1, mDTO2, mDTO3));
     }
 
 
@@ -166,10 +179,17 @@ class MealDAOTest {
     }
 
     @Test
-    void maxPrepTime() {
-        int actual = mealDAO.maxPrepTime(15).size();
-        int expected = 2;
+    @DisplayName("Hamcrest test for delete")
+    void delete2() {
+        int numberOf = mealDAO.readAll().size();
+        mealDAO.delete(2);
 
-        assertEquals(expected, actual);
+        assertThat(mealDAO.readAll(), hasSize(numberOf - 1));
+    }
+
+    @Test
+    @DisplayName("Hamcrest test for maxPrepTime")
+    void maxPrepTime2() {
+        assertThat(mealDAO.maxPrepTime(15), hasSize(2));
     }
 }

@@ -5,6 +5,7 @@ import dat.dtos.IngredientsDTO;
 import dat.dtos.MealDTO;
 import dat.entities.Ingredients;
 import dat.entities.Meal;
+import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
@@ -127,13 +128,31 @@ public class MealDAO implements IDAO<MealDTO, Integer> {
     }
 
     public void delete(Integer mealId) {
-        try (EntityManager em = emf.createEntityManager()) {
-            em.getTransaction().begin();
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        try {
+            // Find the meal to delete
             Meal meal = em.find(Meal.class, mealId);
-            if (meal != null) {
-                em.remove(meal);
+            if (meal == null) {
+                throw new ApiException(404, "Meal not found");
             }
+
+            // Remove the meal from all ingredients that reference it
+            for (Ingredients ingredient : meal.getIngredients()) {
+                ingredient.get().remove(meal);  // Assuming you have a getMeals() method in Ingredients
+                em.merge(ingredient); // Update the ingredient in the database
+            }
+
+            // Now remove the meal
+            em.remove(meal);
             em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback(); // Rollback on error
+            e.printStackTrace();
+            throw new ApiException(500, "Something went wrong trying to delete a meal");
+        } finally {
+            em.close(); // Ensure entity manager is closed
         }
     }
 
@@ -141,13 +160,6 @@ public class MealDAO implements IDAO<MealDTO, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<MealDTO> query = em.createQuery("SELECT new dat.dtos.MealDTO(m) FROM Meal m WHERE m.mealPrepTime <= :prepTime", MealDTO.class);
             query.setParameter("prepTime", prepTime);
-            return query.getResultList();
-        }
-    }
-
-    public List<MealDTO> urmom() {
-        try (EntityManager em = emf.createEntityManager()) {
-            TypedQuery<MealDTO> query = em.createQuery("SELECT new dat.dtos.MealDTO(m) FROM Meal m", MealDTO.class);
             return query.getResultList();
         }
     }
