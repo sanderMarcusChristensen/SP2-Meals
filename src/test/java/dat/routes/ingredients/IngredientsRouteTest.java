@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class IngredientsRouteTest {
 
     private static Javalin app;
-    private static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
+    private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
     private static String BASE_URL = "http://localhost:8008/api/ingredients";
     private static IngredientsDAO dao = IngredientsDAO.getInstance(emf);
     private static PopulateIngredientsForTest populateIngredientsForTest = new PopulateIngredientsForTest(dao, emf);

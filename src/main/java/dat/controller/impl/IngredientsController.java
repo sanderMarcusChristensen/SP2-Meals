@@ -16,7 +16,7 @@ public class IngredientsController implements IController<IngredientsDTO, Intege
     //private IngredientsDAO dao;
 
     public IngredientsController() {
-        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("meals");
+        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
         this.dao = IngredientsDAO.getInstance(emf);
     }
 

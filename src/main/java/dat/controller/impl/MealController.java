@@ -14,7 +14,7 @@ public class MealController implements IController<MealDTO, Integer> {
     private final MealDAO dao;
 
     public MealController() {
-        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("meals");
+        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
         this.dao = MealDAO.getInstance(emf);
     }
 

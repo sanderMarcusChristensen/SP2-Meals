@@ -25,15 +25,12 @@ import static org.hamcrest.CoreMatchers.equalTo;
 class MealRouteTest {
     private static Javalin app;
     private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
-    private static MealDAO mealDAO = MealDAO.getInstance(emf);
-    private static Populator populator = new Populator(emf, mealDAO);
-    private static String BASE_URL = "http://localhost:8008/api";
+    private static final MealDAO mealDAO = MealDAO.getInstance(emf);
+    private static final Populator populator = new Populator(emf, mealDAO);
+    private static final String BASE_URL = "http://localhost:8008/api";
 
     private static Meal m1, m2, m3;
     private static List<Meal> meals;
-
-    private String jwtTokenUser;
-    private String jwtTokenAdmin;
 
     @BeforeAll
     void beforeAll() {
@@ -96,7 +93,6 @@ class MealRouteTest {
         mealDTO.setIngredients(List.of(new IngredientsDTO("Rice", "200g"), new IngredientsDTO("Salmon", "100g")));
         Meal meal =
                 given()
-                        .header("Authorization", "Bearer " + jwtTokenAdmin)
                         .contentType("application/json")
                         .body(mealDTO)
                         .when()
@@ -117,7 +113,6 @@ class MealRouteTest {
         mealDTO.setIngredients(List.of(new IngredientsDTO("Rice", "200g"), new IngredientsDTO("Salmon", "100g")));
         Meal meal =
                 given()
-                        .header("Authorization", "Bearer " + jwtTokenAdmin)
                         .contentType("application/json")
                         .body(mealDTO)
                         .when()
@@ -153,7 +148,6 @@ class MealRouteTest {
     @DisplayName("Test delete meal")
     void deleteMeal() {
         given()
-                .header("Authorization", "Bearer " + jwtTokenAdmin)
                 .when()
                 .get(BASE_URL + "/meals/" + m1.getMealId())
                 .then()

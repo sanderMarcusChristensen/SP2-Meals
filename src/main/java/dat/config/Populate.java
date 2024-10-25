@@ -13,7 +13,7 @@ import java.util.Set;
 public class Populate {
     public static void main(String[] args) {
 
-        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("meals");
+        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
 
         Set<Meal> meals = getMeals(); // Get meals with ingredients
 
