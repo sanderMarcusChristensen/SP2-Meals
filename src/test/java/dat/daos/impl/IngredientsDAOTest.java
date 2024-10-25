@@ -60,17 +60,13 @@ class IngredientsDAOTest {
     }
 
     @Test
-    @DisplayName("Update an ingredient ")
     void update() {
-        assertThat(dao.readAll(), hasSize(4));
-        int idToDelete = i1.getId();
+        assertThat(i1.getName(), is("Olive Oil"));
+        i1.setName("Strawberry");
 
-        // Perform the deletion
-        dao.delete(idToDelete);
-        assertThat(dao.readAll(), hasSize(3));
-
-        IngredientsDTO deletedIngredient = dao.read(idToDelete);
-        assertThat(deletedIngredient, is(nullValue()));
+        int id = i1.getId();
+        dao.update(id,i1);
+        assertThat(dao.read(i1.getId()).getName(), is("Strawberry"));
     }
 
 
@@ -81,6 +77,16 @@ class IngredientsDAOTest {
         Ingredients remadeIngredient = new Ingredients(i1);
         IngredientsDTO ingredients = dao.read(remadeIngredient.getId());
         assertThat(ingredients.getName(), is(remadeIngredient.getName()));
+    }
+
+    @Test
+    @DisplayName("get all ingredients ")
+    void getAll(){
+        assertThat(ingredientsDTOS, hasSize(4));
+        List<IngredientsDTO> retrievedIngredients = dao.readAll();
+        assertThat(retrievedIngredients, hasSize(4));
+        assertThat(retrievedIngredients, containsInAnyOrder(i1, i2, i3, i4));
+
     }
 
     @Test
