@@ -11,7 +11,6 @@ public class PopulateIngredientsForTest {
     private EntityManagerFactory emf;
     private IngredientsDTO i1, i2, i3, i4;
 
-
     public PopulateIngredientsForTest(IngredientsDAO dao_, EntityManagerFactory emf_) {
         this.dao = dao_;
         this.emf = emf_;
@@ -43,8 +42,3 @@ public class PopulateIngredientsForTest {
         }
     }
 }
-
-
-
-
-
