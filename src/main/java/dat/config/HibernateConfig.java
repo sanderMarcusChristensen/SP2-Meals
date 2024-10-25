@@ -1,7 +1,6 @@
 package dat.config;
 
 
-
 import dat.entities.Ingredients;
 import dat.entities.Meal;
 import jakarta.persistence.EntityManagerFactory;
@@ -9,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.cfg.Configuration;
+
 import java.util.Properties;
 
 import static dat.util.ApiProperties.DB_PASS;
@@ -34,17 +34,18 @@ public class HibernateConfig {
         }
         return emf;
     }
-    public static void setTest(Boolean test){
+
+    public static void setTest(Boolean test) {
         isTest = test;
     }
 
-    public static Boolean isTest(){
+    public static Boolean isTest() {
         return isTest;
     }
 
     public static EntityManagerFactory getEntityManagerFactoryForTest() {
         if (emfTest == null)
-            emfTest = createEMF(true,"");
+            emfTest = createEMF(true, "");
         return emfTest;
     }
 
@@ -108,7 +109,7 @@ public class HibernateConfig {
     private static Properties setDevProperties(Properties props, String DBName) {
         props.put("hibernate.connection.url", "jdbc:postgresql://localhost:5432/" + DBName);
         props.put("hibernate.connection.username", DB_USER);
-        props.put("hibernate.connection.password",DB_PASS );
+        props.put("hibernate.connection.password", DB_PASS);
         return props;
     }
 

@@ -68,15 +68,16 @@ Authorization: Bearer {{jwt_token}}
   "mealInstructions": "Instruction to cook: ......",
   "mealPrepTime": 30,
   "mealRating": 4.9,
-  "ingredients" : [{
-    "name": "Chicken",
-    "quantity": "500g"
-  },
-  {
-    "name": "Butter",
-    "quantity": "100g"
-  }]
-
+  "ingredients": [
+    {
+      "name": "Chicken",
+      "quantity": "500g"
+    },
+    {
+      "name": "Butter",
+      "quantity": "100g"
+    }
+  ]
 }
 
 
@@ -113,7 +114,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:7007/api/ingredients/1
+GET http://localhost:7007/api/ingredients/3
 
 ###
 

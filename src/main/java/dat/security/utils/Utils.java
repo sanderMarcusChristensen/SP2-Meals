@@ -19,7 +19,8 @@ public class Utils {
     public static void main(String[] args) {
         System.out.println(getPropertyValue("db.name", "properties-from-pom.properties"));
     }
-    public static String getPropertyValue(String propName, String ressourceName)  {
+
+    public static String getPropertyValue(String propName, String ressourceName) {
         // REMEMBER TO BUILD WITH MAVEN FIRST. Read the property file if not deployed (else read system vars instead)
         // Read from ressources/config.properties or from pom.xml depending on the ressourceName
         try (InputStream is = Utils.class.getClassLoader().getResourceAsStream(ressourceName)) { //"config.properties" or "properties-from-pom.properties"

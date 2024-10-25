@@ -1,12 +1,9 @@
 package dat.routes;
 
-import dat.config.HibernateConfig;
+
 import dat.controller.impl.IngredientsController;
-import dat.daos.impl.IngredientsDAO;
 import dat.security.utils.Role;
 import io.javalin.apibuilder.EndpointGroup;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
 import static io.javalin.apibuilder.ApiBuilder.delete;

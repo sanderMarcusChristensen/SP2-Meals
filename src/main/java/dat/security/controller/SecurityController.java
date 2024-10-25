@@ -34,7 +34,8 @@ public class SecurityController implements ISecurityController {
     private static ISecurityDAO securityDAO;
     private static SecurityController instance;
 
-    private SecurityController() { }
+    private SecurityController() {
+    }
 
 
     public static SecurityController getInstance() { // Singleton because we don't want multiple instances of the same class

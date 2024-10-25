@@ -11,7 +11,7 @@ import java.util.Set;
 
 /**
  * Purpose: To handle security in the API
- *  Author: Thomas Hartmann
+ * Author: Thomas Hartmann
  */
 @Entity
 @Table(name = "roles")
@@ -30,7 +30,8 @@ public class Role implements Serializable {
     @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<>();
 
-    public Role() {}
+    public Role() {
+    }
 
     public Role(String roleName) {
         this.name = roleName;

@@ -7,7 +7,6 @@ import dat.entities.Ingredients;
 import dat.entities.Meal;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.TypedQuery;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

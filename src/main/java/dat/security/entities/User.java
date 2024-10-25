@@ -60,6 +60,7 @@ public class User implements Serializable, ISecurityUser {
         this.username = userName;
         this.password = BCrypt.hashpw(userPass, BCrypt.gensalt());
     }
+
     public User(String userName, Set<Role> roleEntityList) {
         this.username = userName;
         this.roles = roleEntityList;
@@ -68,6 +69,7 @@ public class User implements Serializable, ISecurityUser {
     public void addRole(Role role) {
         roles.add(role);
     }
+
     public void removeRole(String userRole) {
         roles.stream()
                 .filter(role -> role.getRoleName().equals(userRole))
