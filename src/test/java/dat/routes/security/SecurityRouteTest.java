@@ -85,7 +85,7 @@ public class SecurityRouteTest {
     }
 
     @Test
-    void login() {
+    void login() { //Doesnt work
         jwtToken =
                 given()
                         .contentType("application/json")
