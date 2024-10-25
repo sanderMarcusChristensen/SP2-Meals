@@ -11,21 +11,21 @@ import org.junit.jupiter.api.*;
 import org.testcontainers.shaded.org.hamcrest.Matchers;
 
 import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 class IngredientsDAOTest {
 
     private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
-    private static IngredientsDAO dao;
-    private static PopulateIngredientsForTest populator = new PopulateIngredientsForTest(dao,emf);
+    private static IngredientsDAO dao = IngredientsDAO.getInstance(emf);
+    private static PopulateIngredientsForTest populator = new PopulateIngredientsForTest(dao, emf);
 
-    private static IngredientsDTO i1, i2, i3,i4;
+    private static IngredientsDTO i1, i2, i3, i4;
     private static List<IngredientsDTO> ingredientsDTOS;
 
     @BeforeAll
     static void beforeAll() {
-        dao = IngredientsDAO.getInstance(emf);
     }
 
 
@@ -63,7 +63,7 @@ class IngredientsDAOTest {
         i1.setName("Strawberry");
 
         int id = i1.getId();
-        dao.update(id,i1);
+        dao.update(id, i1);
         assertThat(dao.read(i1.getId()).getName(), is("Strawberry"));
     }
 
@@ -78,7 +78,7 @@ class IngredientsDAOTest {
 
     @Test
     @DisplayName("get all ingredients ")
-    void getAll(){
+    void getAll() {
         assertThat(ingredientsDTOS, hasSize(4));
         List<IngredientsDTO> retrievedIngredients = dao.readAll();
         assertThat(retrievedIngredients, hasSize(4));
