@@ -29,7 +29,6 @@ public class PopulateIngredientsForTest {
         dao.create(i4);
     }
 
-
     public void cleanUpIngredients() {
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();

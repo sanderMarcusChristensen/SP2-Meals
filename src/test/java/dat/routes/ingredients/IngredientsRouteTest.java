@@ -164,5 +164,4 @@ class IngredientsRouteTest {
                 .log().all()
                 .statusCode(400); // Ingredient should not exist anymore
     }
-
 }
