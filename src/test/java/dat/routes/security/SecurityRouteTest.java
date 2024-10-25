@@ -10,7 +10,9 @@ import dat.routes.meals.Populator;
 import dat.security.daos.SecurityDAO;
 import dat.security.entities.Role;
 import dat.security.entities.User;
+import dat.security.exceptions.ValidationException;
 import dat.utils.ApiProperties;
+import dk.bugelhartmann.UserDTO;
 import io.javalin.Javalin;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.*;
@@ -43,8 +45,11 @@ public class SecurityRouteTest {
     @BeforeAll
     void beforeAll() {
         app = AppConfig.startServer(ApiProperties.PORT);
-        List<Role> roles = populator.createRoles();
-        roles.forEach(populator::persistRoleIfNotExists);
+        try {
+            populator.createTestUser();
+        } catch (ValidationException e) {
+            e.printStackTrace();
+        }
     }
 
     @BeforeEach
@@ -54,11 +59,6 @@ public class SecurityRouteTest {
         m1 = meals.get(0);
         m2 = meals.get(1);
         m3 = meals.get(2);
-
-
-        List<Role> roles = populator.createRoles();
-        List<User> users = populator.createUsers(roles);
-        populator.persist(users);
     }
 
     @AfterEach
@@ -71,29 +71,29 @@ public class SecurityRouteTest {
         AppConfig.stopServer(app);
     }
 
-            //TODO Fix all security related methods, so the tests in securityRouteTest can be run
+    //TODO Fix all security related methods, so the tests in securityRouteTest can be run
 
     @Test
     @DisplayName("Test endpoint /auth/test")
     void test() {
         given()
                 .when()
-                .get("/auth/test")
+                .get(BASE_URL + "/auth/test")
                 .then()
                 .statusCode(200)
-                .body("message", equalTo("Hello from Open Deployment"));
+                .body("msg", equalTo("Hello from Open Deployment"));
     }
 
     @Test
-    void login() { //Doesnt work
-        jwtToken =
-                given()
-                        .contentType("application/json")
-                        .body("{\"username\": \"userTest\", \"password\": \"userTest\"}")
-                        .post(BASE_URL + "/auth/login")
-                        .then()
-                        .statusCode(200)
-                        .extract()
-                        .path("token");
+    void login() {
+        UserDTO userDTO = new UserDTO("userTest", "1234");
+
+        given()
+                .body(userDTO)
+                .when()
+                .post("/auth/login")
+                .then()
+                .statusCode(200)
+                .body("username", equalTo(userDTO.getUsername()));
     }
 }

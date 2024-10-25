@@ -1,5 +1,6 @@
 package dat.routes.meals;
 
+import dat.config.HibernateConfig;
 import dat.daos.impl.MealDAO;
 import dat.dtos.MealDTO;
 import dat.entities.Ingredients;
@@ -7,18 +8,17 @@ import dat.entities.Meal;
 import dat.security.daos.SecurityDAO;
 import dat.security.entities.Role;
 import dat.security.entities.User;
+import dat.security.exceptions.ValidationException;
 import dk.bugelhartmann.UserDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
-import java.util.Set;
 
 public class Populator {
 
     private static EntityManagerFactory emf;
     private static MealDAO mealDAO;
-    private static SecurityDAO securityDAO;
 
     public Populator(EntityManagerFactory emf, MealDAO mealDAO) {
         this.emf = emf;
@@ -76,62 +76,18 @@ public class Populator {
         mealDAO.create(mDTO3);
     }
 
-        //TODO Fix all security related methods, so the tests in securityRouteTest can be run
+    //TODO Fix security related method, so the tests in securityRouteTest can be run
 
     //security
-    public List<User> createUsers(List<Role> roles) {
-        return List.of(
-                new User(
-                        "User1",
-                        "1234",
-                        Set.of(roles.get(0))
-                ),
-                new User(
-                        "User2",
-                        "1234",
-                        Set.of(roles.get(0))
-                ),
-                new User(
-                        "Admin1",
-                        "1234",
-                        Set.of(roles.get(1))
-                )
-        );
+    public void createTestUser() throws ValidationException {
+        EntityManagerFactory emf_ = HibernateConfig.getEntityManagerFactoryForTest();
+        SecurityDAO securityDAO = SecurityDAO.getInstance(emf_);
+
+        User createdUser = securityDAO.createUser("userTest", "1234");
+        UserDTO createdUserDTO = securityDAO.getVerifiedUser(createdUser.getUsername(), createdUser.getPassword());
+        securityDAO.addRole(createdUserDTO, "user");
     }
 
-    //security
-    public List<Role> createRoles() {
-        return List.of(
-                new Role("s"),
-                new Role("admin")
-        );
-    }
-
-    //security
-    public void persist(List<?> entities) {
-        try (EntityManager em = emf.createEntityManager()) {
-            em.getTransaction().begin();
-            entities.forEach(em::persist);
-            em.getTransaction().commit();
-        }
-    }
-
-    //security
-    public void persistRoleIfNotExists(Role role) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            em.getTransaction().begin();
-
-            Role existingRole = em.find(Role.class, role.getRoleName());
-            if (existingRole == null) {
-                em.persist(role);
-            }
-
-            em.getTransaction().commit();
-        } finally {
-            em.close();
-        }
-    }
 
     public void clearDatabase() {
         try (EntityManager em = emf.createEntityManager()) {

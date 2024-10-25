@@ -6,6 +6,7 @@ import dat.daos.impl.MealDAO;
 import dat.dtos.IngredientsDTO;
 import dat.dtos.MealDTO;
 import dat.entities.Meal;
+import dat.security.daos.SecurityDAO;
 import dat.utils.ApiProperties;
 import io.javalin.Javalin;
 import jakarta.persistence.EntityManagerFactory;
