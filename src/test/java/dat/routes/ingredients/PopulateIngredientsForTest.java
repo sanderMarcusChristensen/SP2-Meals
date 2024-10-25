@@ -2,6 +2,7 @@ package dat.routes.ingredients;
 
 import dat.daos.impl.IngredientsDAO;
 import dat.dtos.IngredientsDTO;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
 public class PopulateIngredientsForTest {
@@ -11,9 +12,9 @@ public class PopulateIngredientsForTest {
     private IngredientsDTO i1, i2, i3, i4;
 
 
-    public PopulateIngredientsForTest(IngredientsDAO dao, EntityManagerFactory emf) {
-        this.dao = dao;
-        this.emf = emf;
+    public PopulateIngredientsForTest(IngredientsDAO dao_, EntityManagerFactory emf_) {
+        this.dao = dao_;
+        this.emf = emf_;
     }
 
     public void populateIngredientsInDatabase() {
@@ -30,7 +31,7 @@ public class PopulateIngredientsForTest {
     }
 
     public void cleanUpIngredients() {
-        try (var em = emf.createEntityManager()) {
+        try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.createQuery("DELETE FROM Ingredients").executeUpdate();
             em.createQuery("DELETE FROM Meal").executeUpdate();
