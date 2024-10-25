@@ -36,4 +36,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/meal_api:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/meals_api:latest
