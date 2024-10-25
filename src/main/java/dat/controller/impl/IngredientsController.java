@@ -23,18 +23,10 @@ public class IngredientsController implements IController<IngredientsDTO, Intege
 
     @Override
     public void read(Context ctx) {
-        try {
-            int id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
-            IngredientsDTO dto = dao.read(id);
-
-            if (dto != null) {
-                ctx.json(dto);
-                ctx.status(200);
-            }
-
-        } catch (Exception e) {
-            throw new ApiException(404, "id not found");
-        }
+        int id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
+        IngredientsDTO dto = dao.read(id);
+        ctx.res().setStatus(200);
+        ctx.json(dto, IngredientsDTO.class);
     }
 
     @Override
@@ -90,17 +82,8 @@ public class IngredientsController implements IController<IngredientsDTO, Intege
         int id = ctx.pathParamAsClass("id", Integer.class)
                 .check(this::validatePrimaryKey, "Not a valid id")
                 .get();
-
-        // Check if the ingredient exists before deleting
-        IngredientsDTO ingredients = dao.read(id);
-        if (ingredients == null) {
-            // Return 404 if the ingredient is not found
-            ctx.status(404).result("Ingredient not found");
-            return;
-        }
-
         dao.delete(id);
-        ctx.status(204); // No Content after successful deletion
+        ctx.res().setStatus(204); // No Content after successful deletion
     }
 
 

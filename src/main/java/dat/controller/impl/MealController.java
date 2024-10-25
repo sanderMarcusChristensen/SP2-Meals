@@ -58,7 +58,7 @@ public class MealController implements IController<MealDTO, Integer> {
         MealDTO jsonRequest = ctx.bodyAsClass(MealDTO.class);
         MealDTO mealDTO = dao.update(id, jsonRequest);
         //response
-        ctx.res().setStatus(200);
+        ctx.res().setStatus(201);
         ctx.json(mealDTO, MealDTO.class);
     }
 

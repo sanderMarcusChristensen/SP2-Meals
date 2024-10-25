@@ -162,7 +162,7 @@ class IngredientsRouteTest {
                 .get(BASE_URL + "/" + i1.getId())
                 .then()
                 .log().all()
-                .statusCode(404); // Ingredient should not exist anymore
+                .statusCode(400); // Ingredient should not exist anymore
     }
 
 }

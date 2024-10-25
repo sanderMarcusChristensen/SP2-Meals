@@ -124,7 +124,7 @@ class MealRouteTest {
                         .put(BASE_URL + "/meals/" + m1.getMealId())
                         .then()
                         .log().all()
-                        .statusCode(200)
+                        .statusCode(201)
                         .extract()
                         .as(Meal.class);
         assertThat(meal.getMealName(), equalTo(mealDTO.getMealName()));
