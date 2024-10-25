@@ -8,5 +8,6 @@ public class Main {
     public static void main(String[] args) {
         AppConfig.startServer(ApiProperties.PORT);
         Populate.main(args);
+        //Test6
     }
 }
