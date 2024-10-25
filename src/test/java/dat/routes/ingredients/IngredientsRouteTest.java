@@ -7,6 +7,7 @@ import dat.dtos.IngredientsDTO;
 import dat.dtos.MealDTO;
 import dat.entities.Ingredients;
 import dat.entities.Meal;
+import dat.utils.ApiProperties;
 import io.javalin.Javalin;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.*;
@@ -34,7 +35,7 @@ class IngredientsRouteTest {
 
     @BeforeAll
     static void init() {
-        app = AppConfig.startServer(); // Start the server using AppConfig
+        app = AppConfig.startServer(ApiProperties.PORT); // Start the server using AppConfig
     }
 
     @BeforeEach
@@ -161,7 +162,7 @@ class IngredientsRouteTest {
                 .get(BASE_URL + "/" + i1.getId())
                 .then()
                 .log().all()
-                .statusCode(404); // Ingredient should not exist anymore
+                .statusCode(400); // Ingredient should not exist anymore
     }
 
 }

@@ -1,8 +1,7 @@
 package dat.security.entities;
 
-
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.ToString;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -11,7 +10,7 @@ import java.util.Set;
 
 /**
  * Purpose: To handle security in the API
- *  Author: Thomas Hartmann
+ * Author: Thomas Hartmann
  */
 @Entity
 @Table(name = "roles")
@@ -26,11 +25,12 @@ public class Role implements Serializable {
     @Column(name = "name", length = 20)
     private String name;
 
-    @Getter
+    @ToString.Exclude
     @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<>();
 
-    public Role() {}
+    public Role() {
+    }
 
     public Role(String roleName) {
         this.name = roleName;
@@ -40,10 +40,12 @@ public class Role implements Serializable {
         return name;
     }
 
+    public Set<User> getUsers() {
+        return users;
+    }
+
     @Override
     public String toString() {
-        return "Role{" +
-                "roleName='" + name + '\'' +
-                '}';
+        return "Role{" + "roleName='" + name + '\'' + '}';
     }
 }

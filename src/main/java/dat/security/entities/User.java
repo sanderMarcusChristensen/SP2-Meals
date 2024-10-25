@@ -1,6 +1,5 @@
 package dat.security.entities;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import org.mindrot.jbcrypt.BCrypt;
@@ -35,10 +34,8 @@ public class User implements Serializable, ISecurityUser {
     @Column(name = "password")
     private String password;
 
-    @JoinTable(name = "user_roles", joinColumns = {
-            @JoinColumn(name = "user_name", referencedColumnName = "username")}, inverseJoinColumns = {
-            @JoinColumn(name = "role_name", referencedColumnName = "name")})
-    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_name", referencedColumnName = "username")}, inverseJoinColumns = {@JoinColumn(name = "role_name", referencedColumnName = "name")})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Set<Role> roles = new HashSet<>();
 
     public Set<String> getRolesAsStrings() {
@@ -60,14 +57,20 @@ public class User implements Serializable, ISecurityUser {
         this.username = userName;
         this.password = BCrypt.hashpw(userPass, BCrypt.gensalt());
     }
+
     public User(String userName, Set<Role> roleEntityList) {
         this.username = userName;
         this.roles = roleEntityList;
     }
 
     public void addRole(Role role) {
+        if (role == null) {
+            return;
+        }
         roles.add(role);
+        role.getUsers().add(this);
     }
+
     public void removeRole(String userRole) {
         roles.stream()
                 .filter(role -> role.getRoleName().equals(userRole))
@@ -77,5 +80,5 @@ public class User implements Serializable, ISecurityUser {
                     role.getUsers().remove(this);
                 });
     }
-
 }
+

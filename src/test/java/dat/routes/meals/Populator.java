@@ -1,9 +1,15 @@
 package dat.routes.meals;
 
+import dat.config.HibernateConfig;
 import dat.daos.impl.MealDAO;
 import dat.dtos.MealDTO;
 import dat.entities.Ingredients;
 import dat.entities.Meal;
+import dat.security.daos.SecurityDAO;
+import dat.security.entities.Role;
+import dat.security.entities.User;
+import dat.security.exceptions.ValidationException;
+import dk.bugelhartmann.UserDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -48,7 +54,6 @@ public class Populator {
                 new Ingredients("Mozzarella cheese", "100g")
         ));
 
-
         Meal m3 = Meal.builder()
                 .mealName("Pasta")
                 .mealDescription("A delicious pasta")
@@ -71,13 +76,28 @@ public class Populator {
         mealDAO.create(mDTO3);
     }
 
+    //TODO Fix security related method, so the tests in securityRouteTest can be run
+
+    //security
+    public void createTestUser() throws ValidationException {
+        EntityManagerFactory emf_ = HibernateConfig.getEntityManagerFactoryForTest();
+        SecurityDAO securityDAO = SecurityDAO.getInstance(emf_);
+
+        User createdUser = securityDAO.createUser("userTest", "1234");
+        UserDTO createdUserDTO = securityDAO.getVerifiedUser(createdUser.getUsername(), createdUser.getPassword());
+        securityDAO.addRole(createdUserDTO, "user");
+    }
+
+
     public void clearDatabase() {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
+
             em.createQuery("DELETE FROM Meal").executeUpdate();
             em.createQuery("DELETE FROM Ingredients").executeUpdate();
-            em.createNativeQuery("ALTER SEQUENCE meal_meal_id_seq RESTART WITH 1").executeUpdate();
-            em.createNativeQuery("ALTER SEQUENCE ingredients_id_seq RESTART WITH 1").executeUpdate();
+            em.createQuery("DELETE FROM User").executeUpdate();
+            em.createQuery("DELETE FROM Role").executeUpdate();
+
             em.getTransaction().commit();
         }
     }

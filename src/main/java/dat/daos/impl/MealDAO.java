@@ -8,7 +8,6 @@ import dat.entities.Meal;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.TypedQuery;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -20,7 +19,6 @@ import java.util.List;
 public class MealDAO implements IDAO<MealDTO, Integer> {
 
     private static MealDAO instance;
-    private static IngredientsDAO ingredientsDAO;
     private static EntityManagerFactory emf;
 
     public static MealDAO getInstance(EntityManagerFactory _emf) {

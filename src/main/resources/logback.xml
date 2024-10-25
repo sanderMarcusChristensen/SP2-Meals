@@ -1,10 +1,9 @@
-
 <configuration scan="true">
 
-    <property name="LOG_BASEDIR" value="./logs" />
-    <property name="LOG_FILE" value="api_logs" />
-    <property name="LOG_FILE_MAX_SIZE" value="10MB" />
-    <property name="LOG_FILE_MAX_HISTORY" value="180" />
+    <property name="LOG_BASEDIR" value="./logs"/>
+    <property name="LOG_FILE" value="api_logs"/>
+    <property name="LOG_FILE_MAX_SIZE" value="10MB"/>
+    <property name="LOG_FILE_MAX_HISTORY" value="180"/>
 
     <!-- File Appender -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">

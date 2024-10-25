@@ -68,21 +68,22 @@ Authorization: Bearer {{jwt_token}}
   "mealInstructions": "Instruction to cook: ......",
   "mealPrepTime": 30,
   "mealRating": 4.9,
-  "ingredients" : [{
-    "name": "Chicken",
-    "quantity": "500g"
-  },
-  {
-    "name": "Butter",
-    "quantity": "100g"
-  }]
-
+  "ingredients": [
+    {
+      "name": "Chicken",
+      "quantity": "500g"
+    },
+    {
+      "name": "Butter",
+      "quantity": "100g"
+    }
+  ]
 }
 
 
 ###
 
-PUT {{url}}/meals/7
+PUT {{url}}/meals/8
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{jwt_token}}
@@ -94,12 +95,13 @@ Authorization: Bearer {{jwt_token}}
 
 ###
 
-GET {{url}}/meals/prepTime/30
+DELETE {{url}}/meals/8
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
 
 ###
 
-DELETE {{url}}/meals/7
-
+GET {{url}}/meals/prepTime/30
 
 ### --------------------  Ingredients ENDPOINTS  ------------------------------
 
@@ -113,7 +115,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:7007/api/ingredients/1
+GET http://localhost:7007/api/ingredients/3
 
 ###
 

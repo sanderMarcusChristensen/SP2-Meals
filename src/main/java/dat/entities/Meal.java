@@ -1,6 +1,6 @@
 package dat.entities;
 
-import dat.dtos.IngredientsDTO;
+
 import dat.dtos.MealDTO;
 import jakarta.persistence.*;
 import lombok.*;
@@ -68,7 +68,7 @@ public class Meal {
         this.mealPrepTime = mealDTO.getMealPrepTime();
         this.mealRating = mealDTO.getMealRating();
 
-        if(mealDTO.getIngredients() != null) {
+        if (mealDTO.getIngredients() != null) {
             this.ingredients = mealDTO.getIngredients().stream()
                     .map(Ingredients::new)
                     .collect(Collectors.toList());
@@ -87,6 +87,7 @@ public class Meal {
     public int hashCode() {
         return Objects.hash(mealId, mealName, mealDescription, mealInstructions, mealPrepTime, mealRating, ingredients);
     }
+
     public static List<Meal> toMealList(List<MealDTO> mealDTOS) {
         return mealDTOS.stream().map(Meal::new).collect(Collectors.toList());
     }

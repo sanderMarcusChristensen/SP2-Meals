@@ -11,9 +11,9 @@ import jakarta.persistence.TypedQuery;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class IngredientsDAO implements IDAO<IngredientsDTO, Integer> {
@@ -32,19 +32,19 @@ public class IngredientsDAO implements IDAO<IngredientsDTO, Integer> {
 
     @Override
     public IngredientsDTO read(Integer integer) {
-       try(EntityManager em = emf.createEntityManager()) {
-           em.getTransaction().begin();
-           Ingredients ingredients = em.find(Ingredients.class, integer);
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            Ingredients ingredients = em.find(Ingredients.class, integer);
 
-           if(ingredients != null){
-               return new IngredientsDTO(ingredients);
-           }
-           em.getTransaction().commit();
-           return null;
-       } catch (Exception e) {
-           e.printStackTrace();
-       }
-       return null;
+            if (ingredients != null) {
+                return new IngredientsDTO(ingredients);
+            }
+            em.getTransaction().commit();
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -80,19 +80,19 @@ public class IngredientsDAO implements IDAO<IngredientsDTO, Integer> {
 
     @Override
     public IngredientsDTO update(Integer id, IngredientsDTO ingredientsDTO) {
-        try(EntityManager em = emf.createEntityManager()) {
+        try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Ingredients ingredients = em.find(Ingredients.class, id);
 
-            if(ingredients == null){
+            if (ingredients == null) {
                 em.getTransaction().rollback();
                 return null;
             }
-            if(ingredients.getName() != null ){
+            if (ingredients.getName() != null) {
                 ingredients.setName(ingredientsDTO.getName());
             }
 
-            if (ingredients.getQuantity() != null){
+            if (ingredients.getQuantity() != null) {
                 ingredients.setQuantity(ingredientsDTO.getQuantity());
             }
 
@@ -139,7 +139,6 @@ public class IngredientsDAO implements IDAO<IngredientsDTO, Integer> {
             em.close(); // Ensure entity manager is closed
         }
     }
-
 
 
     @Override

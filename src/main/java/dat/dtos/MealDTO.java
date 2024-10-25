@@ -29,7 +29,7 @@ public class MealDTO {
         this.mealPrepTime = meal.getMealPrepTime();
         this.mealRating = meal.getMealRating();
 
-        if(meal.getIngredients() != null) {
+        if (meal.getIngredients() != null) {
             this.ingredients = meal.getIngredients().stream()
                     .map(IngredientsDTO::new)
                     .collect(Collectors.toList());

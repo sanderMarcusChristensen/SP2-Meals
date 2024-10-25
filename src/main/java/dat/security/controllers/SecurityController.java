@@ -1,28 +1,33 @@
-package dat.security.controller;
-
+package dat.security.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.nimbusds.jose.JOSEException;
+import dat.utils.Utils;
 import dat.config.HibernateConfig;
-import dat.exceptions.ApiException;
-import dat.exceptions.NotAuthorizedException;
-import dat.security.dao.ISecurityDAO;
-import dat.security.dao.SecurityDAO;
+import dat.security.daos.ISecurityDAO;
+import dat.security.daos.SecurityDAO;
 import dat.security.entities.User;
-import dat.security.utils.Utils;
+import dat.security.exceptions.ApiException;
+import dat.security.exceptions.NotAuthorizedException;
+import dat.security.exceptions.ValidationException;
 import dk.bugelhartmann.ITokenSecurity;
 import dk.bugelhartmann.TokenSecurity;
 import dk.bugelhartmann.TokenVerificationException;
 import dk.bugelhartmann.UserDTO;
 import io.javalin.http.Handler;
 import io.javalin.http.HttpStatus;
-import io.javalin.validation.ValidationException;
+import io.javalin.http.UnauthorizedResponse;
+import io.javalin.security.RouteRole;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 /**
  * Purpose: To handle security in the API
@@ -33,15 +38,16 @@ public class SecurityController implements ISecurityController {
     ITokenSecurity tokenSecurity = new TokenSecurity();
     private static ISecurityDAO securityDAO;
     private static SecurityController instance;
+    private static Logger logger = LoggerFactory.getLogger(SecurityController.class);
 
-    private SecurityController() { }
-
+    private SecurityController() {
+    }
 
     public static SecurityController getInstance() { // Singleton because we don't want multiple instances of the same class
         if (instance == null) {
             instance = new SecurityController();
         }
-        securityDAO = new SecurityDAO(HibernateConfig.getEntityManagerFactory("hotel"));
+        securityDAO = new SecurityDAO(HibernateConfig.getEntityManagerFactory("meals"));
         return instance;
     }
 
@@ -63,10 +69,6 @@ public class SecurityController implements ISecurityController {
                 System.out.println(e.getMessage());
                 ctx.json(returnObject.put("msg", e.getMessage()));
             }
-//            catch (Exception e) {
-//                e.printStackTrace();
-//                throw new ApiException(500, "Internal server error");
-//            }
         };
     }
 
@@ -78,7 +80,7 @@ public class SecurityController implements ISecurityController {
                 UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
                 User created = securityDAO.createUser(userInput.getUsername(), userInput.getPassword());
 
-                String token = createToken(new UserDTO(created.getUsername(), Set.of("user")));     // USER or user ?
+                String token = createToken(new UserDTO(created.getUsername(), Set.of("USER")));
                 ctx.status(HttpStatus.CREATED).json(returnObject
                         .put("token", token)
                         .put("username", created.getUsername()));
@@ -90,7 +92,7 @@ public class SecurityController implements ISecurityController {
     }
 
     @Override
-    public Handler authenticate() {
+    public Handler authenticate() throws UnauthorizedResponse {
 
         ObjectNode returnObject = objectMapper.createObjectNode();
         return (ctx) -> {
@@ -100,40 +102,39 @@ public class SecurityController implements ISecurityController {
                 return;
             }
             String header = ctx.header("Authorization");
-            // If there is no token we do not allow entry
             if (header == null) {
-                ctx.status(HttpStatus.FORBIDDEN).json(returnObject.put("msg", "Authorization header missing"));
-                return;
+                throw new UnauthorizedResponse("Authorization header missing");
             }
-            String token = header.split(" ")[1];
-            // If the Authorization Header was malformed = no entry
-            if (token == null) {
-                ctx.status(HttpStatus.FORBIDDEN).json(returnObject.put("msg", "Authorization header malformed"));
-                return;
+
+            String[] headerParts = header.split(" ");
+            if (headerParts.length != 2) {
+                throw new UnauthorizedResponse("Authorization header malformed");
             }
+
+            String token = headerParts[1];
             UserDTO verifiedTokenUser = verifyToken(token);
+
             if (verifiedTokenUser == null) {
-                ctx.status(HttpStatus.FORBIDDEN).json(returnObject.put("msg", "Invalid User or Token"));
+                throw new UnauthorizedResponse("Invalid User or Token");
             }
-            System.out.println("USER IN AUTHENTICATE: " + verifiedTokenUser);
-            ctx.attribute("user", verifiedTokenUser); // -> ctx.attribute("user") in ApplicationConfig beforeMatched filter
+            logger.info("User verified: " + verifiedTokenUser);
+            ctx.attribute("user", verifiedTokenUser);
         };
     }
 
     @Override
-    public boolean authorize(UserDTO user, Set<String> allowedRoles) {
-        // Called from the ApplicationConfig.setSecurityRoles
-
-        AtomicBoolean hasAccess = new AtomicBoolean(false); // Since we update this in a lambda expression, we need to use an AtomicBoolean
-        if (user != null) {
-            user.getRoles().stream().forEach(role -> {
-                if (allowedRoles.contains(role.toUpperCase())) {
-                    hasAccess.set(true);
-                }
-            });
+    // Check if the user's roles contain any of the allowed roles
+    public boolean authorize(UserDTO user, Set<RouteRole> allowedRoles) {
+        if (user == null) {
+            throw new UnauthorizedResponse("You need to log in, dude!");
         }
-        return hasAccess.get();
-    }
+        Set<String> roleNames = allowedRoles.stream()
+                   .map(RouteRole::toString)  // Convert RouteRoles to  Set of Strings
+                   .collect(Collectors.toSet());
+        return user.getRoles().stream()
+                   .map(String::toUpperCase)
+                   .anyMatch(roleNames::contains);
+        }
 
     @Override
     public String createToken(UserDTO user) {
@@ -147,8 +148,8 @@ public class SecurityController implements ISecurityController {
                 TOKEN_EXPIRE_TIME = System.getenv("TOKEN_EXPIRE_TIME");
                 SECRET_KEY = System.getenv("SECRET_KEY");
             } else {
-                ISSUER = "Thomas Hartmann";
-                TOKEN_EXPIRE_TIME = "1800000";
+                ISSUER = Utils.getPropertyValue("ISSUER", "config.properties");
+                TOKEN_EXPIRE_TIME = Utils.getPropertyValue("TOKEN_EXPIRE_TIME", "config.properties");
                 SECRET_KEY = Utils.getPropertyValue("SECRET_KEY", "config.properties");
             }
             return tokenSecurity.createToken(user, ISSUER, TOKEN_EXPIRE_TIME, SECRET_KEY);
@@ -174,4 +175,24 @@ public class SecurityController implements ISecurityController {
             throw new ApiException(HttpStatus.UNAUTHORIZED.getCode(), "Unauthorized. Could not verify token");
         }
     }
+
+    public @NotNull Handler addRole() {
+        return (ctx) -> {
+            ObjectNode returnObject = objectMapper.createObjectNode();
+            try {
+                // get the role from the body. the json is {"role": "manager"}.
+                // We need to get the role from the body and the username from the token
+                String newRole = ctx.bodyAsClass(ObjectNode.class).get("role").asText();
+                UserDTO user = ctx.attribute("user");
+                User updatedUser = securityDAO.addRole(user, newRole);
+                ctx.status(200).json(returnObject.put("msg", "Role " + newRole + " added to user"));
+            } catch (EntityNotFoundException e) {
+                ctx.status(404).json("{\"msg\": \"User not found\"}");
+
+
+                
+            }
+        };
+    }
+
 }

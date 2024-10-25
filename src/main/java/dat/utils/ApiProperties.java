@@ -1,4 +1,4 @@
-package dat.util;
+package dat.utils;
 public class ApiProperties {
 
     // == HIBERNATE CONFIG FILE ==

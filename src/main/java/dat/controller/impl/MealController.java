@@ -58,7 +58,7 @@ public class MealController implements IController<MealDTO, Integer> {
         MealDTO jsonRequest = ctx.bodyAsClass(MealDTO.class);
         MealDTO mealDTO = dao.update(id, jsonRequest);
         //response
-        ctx.res().setStatus(200);
+        ctx.res().setStatus(201);
         ctx.json(mealDTO, MealDTO.class);
     }
 
@@ -71,7 +71,7 @@ public class MealController implements IController<MealDTO, Integer> {
         ctx.res().setStatus(204);
     }
 
-    public void maxPrepTime(Context ctx){
+    public void maxPrepTime(Context ctx) {
         //request
         int maxPrepTime = ctx.pathParamAsClass("time", Integer.class).check(m -> m > 0, "Max prep time must be greater than 0").get();
         // DTO
