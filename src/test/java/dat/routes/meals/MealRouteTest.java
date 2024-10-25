@@ -27,7 +27,7 @@ class MealRouteTest {
     private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
     private static MealDAO mealDAO = MealDAO.getInstance(emf);
     private static Populator populator = new Populator(emf, mealDAO);
-    private static String BASE_URL = "http://localhost:7007/api";
+    private static String BASE_URL = "http://localhost:8008/api";
 
     private static Meal m1, m2, m3;
     private static List<Meal> meals;
