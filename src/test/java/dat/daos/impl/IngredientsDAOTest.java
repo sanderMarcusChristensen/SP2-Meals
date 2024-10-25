@@ -31,7 +31,6 @@ class IngredientsDAOTest {
 
     @BeforeEach
     void setUp() {
-        PopulateIngredientsForTest populator = new PopulateIngredientsForTest(dao,emf);
         populator.populateIngredientsInDatabase();
         ingredientsDTOS = dao.readAll();
         i1 = ingredientsDTOS.get(0);
