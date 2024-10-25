@@ -5,6 +5,7 @@ import dat.dtos.IngredientsDTO;
 import dat.dtos.MealDTO;
 import dat.entities.Ingredients;
 import dat.entities.Meal;
+import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
@@ -127,25 +128,22 @@ public class MealDAO implements IDAO<MealDTO, Integer> {
     public void delete(Integer mealId) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
+
             Meal meal = em.find(Meal.class, mealId);
             if (meal != null) {
+                // Clear ingredients associations to delete join table entries
+                meal.getIngredients().clear();
                 em.remove(meal);
             }
             em.getTransaction().commit();
         }
+
     }
 
     public List<MealDTO> maxPrepTime(int prepTime) {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<MealDTO> query = em.createQuery("SELECT new dat.dtos.MealDTO(m) FROM Meal m WHERE m.mealPrepTime <= :prepTime", MealDTO.class);
             query.setParameter("prepTime", prepTime);
-            return query.getResultList();
-        }
-    }
-
-    public List<MealDTO> urmom() {
-        try (EntityManager em = emf.createEntityManager()) {
-            TypedQuery<MealDTO> query = em.createQuery("SELECT new dat.dtos.MealDTO(m) FROM Meal m", MealDTO.class);
             return query.getResultList();
         }
     }
