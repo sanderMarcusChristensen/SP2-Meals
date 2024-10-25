@@ -30,14 +30,13 @@ public class IngredientsController implements IController<IngredientsDTO,Integer
             int id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
             IngredientsDTO dto = dao.read(id);
 
-            if(dto != null) {
+            if (dto != null) {
                 ctx.json(dto);
                 ctx.status(200);
-            } else {
-                ctx.json(new ApiException(404, "Ingredient not found"));
             }
-        } catch (Exception e) {
-            ctx.json(new ApiException(500, "Something went wrong trying to find Ingredient with that id "));
+
+        }catch (Exception e){
+            throw new ApiException(404,"id not found");
         }
     }
 
