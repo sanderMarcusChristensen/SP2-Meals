@@ -83,7 +83,7 @@ Authorization: Bearer {{jwt_token}}
 
 ###
 
-PUT {{url}}/meals/7
+PUT {{url}}/meals/8
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{jwt_token}}
@@ -95,12 +95,13 @@ Authorization: Bearer {{jwt_token}}
 
 ###
 
-GET {{url}}/meals/prepTime/30
+DELETE {{url}}/meals/8
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
 
 ###
 
-DELETE {{url}}/meals/7
-
+GET {{url}}/meals/prepTime/30
 
 ### --------------------  Ingredients ENDPOINTS  ------------------------------
 

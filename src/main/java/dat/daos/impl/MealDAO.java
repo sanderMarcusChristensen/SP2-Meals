@@ -18,7 +18,6 @@ import java.util.List;
 public class MealDAO implements IDAO<MealDTO, Integer> {
 
     private static MealDAO instance;
-    private static IngredientsDAO ingredientsDAO;
     private static EntityManagerFactory emf;
 
     public static MealDAO getInstance(EntityManagerFactory _emf) {

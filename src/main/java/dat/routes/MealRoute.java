@@ -1,7 +1,7 @@
 package dat.routes;
 
 import dat.controller.impl.MealController;
-import dat.security.utils.Role;
+import dat.security.enums.Role;
 import io.javalin.apibuilder.EndpointGroup;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
