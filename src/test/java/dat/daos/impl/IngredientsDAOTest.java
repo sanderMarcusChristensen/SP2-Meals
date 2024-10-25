@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.*;
 
 class IngredientsDAOTest {
 
-    private static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
+    private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
     private static IngredientsDAO dao;
     private static PopulateIngredientsForTest populator = new PopulateIngredientsForTest(dao,emf);
 
@@ -25,7 +25,6 @@ class IngredientsDAOTest {
 
     @BeforeAll
     static void beforeAll() {
-        emf = HibernateConfig.getEntityManagerFactoryForTest();
         dao = IngredientsDAO.getInstance(emf);
     }
 
