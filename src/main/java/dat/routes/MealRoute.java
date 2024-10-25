@@ -13,11 +13,11 @@ public class MealRoute {
     protected EndpointGroup getMealRoutes() {
         return () -> {
             //CRUD
-            post("/", mealController::create, Role.ADMIN);
+            post("/", mealController::create, Role.ANYONE);
             get("/", mealController::readAll, Role.ANYONE);
             get("/{id}", mealController::read, Role.ANYONE);
-            put("/{id}", mealController::update, Role.ADMIN);
-            delete("/{id}", mealController::delete, Role.ADMIN);
+            put("/{id}", mealController::update, Role.ANYONE);
+            delete("/{id}", mealController::delete, Role.ANYONE);
 
             //Custom
             get("/prepTime/{time}", mealController::maxPrepTime, Role.ANYONE);

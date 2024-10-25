@@ -43,6 +43,8 @@ public class SecurityRouteTest {
     @BeforeAll
     void beforeAll() {
         app = AppConfig.startServer(ApiProperties.PORT);
+        List<Role> roles = populator.createRoles();
+        roles.forEach(populator::persistRoleIfNotExists);
     }
 
     @BeforeEach
@@ -53,11 +55,10 @@ public class SecurityRouteTest {
         m2 = meals.get(1);
         m3 = meals.get(2);
 
-//        List<Role> roles = populator.createRoles();
-//        populator.persist(roles);
-//
-//        List<User> users = populator.createUsers(roles);
-//        populator.persist(users);
+
+        List<Role> roles = populator.createRoles();
+        List<User> users = populator.createUsers(roles);
+        populator.persist(users);
     }
 
     @AfterEach
@@ -69,6 +70,8 @@ public class SecurityRouteTest {
     void afterAll() {
         AppConfig.stopServer(app);
     }
+
+            //TODO Fix all security related methods, so the tests in securityRouteTest can be run
 
     @Test
     @DisplayName("Test endpoint /auth/test")

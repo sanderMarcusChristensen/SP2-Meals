@@ -67,14 +67,6 @@ public class Populator {
                 new Ingredients("Parmesan cheese", "50g")
         ));
 
-        User u1 = new User("userTest", "userTest");
-        u1.setRoles(Set.of(new Role("user")));
-
-        User u2 = new User("adminTest", "adminTest");
-        u2.setRoles(Set.of(new Role("admin")));
-        Role user = u1.getRoles().iterator().next();
-        Role admin = u2.getRoles().iterator().next();
-
         MealDTO mDTO1 = new MealDTO(m1);
         MealDTO mDTO2 = new MealDTO(m2);
         MealDTO mDTO3 = new MealDTO(m3);
@@ -82,19 +74,12 @@ public class Populator {
         mealDAO.create(mDTO1);
         mealDAO.create(mDTO2);
         mealDAO.create(mDTO3);
-
-        try(EntityManager em = emf.createEntityManager()) {
-            em.getTransaction().begin();
-            em.persist(user);
-            em.persist(admin);
-            em.persist(u1);
-            em.persist(u2);
-            em.getTransaction().commit();
-        }
     }
 
-    public List<User> createUsers() {
-        List<Role> roles = createRoles();
+        //TODO Fix all security related methods, so the tests in securityRouteTest can be run
+
+    //security
+    public List<User> createUsers(List<Role> roles) {
         return List.of(
                 new User(
                         "User1",
@@ -114,13 +99,15 @@ public class Populator {
         );
     }
 
+    //security
     public List<Role> createRoles() {
         return List.of(
-                new Role("user"),
+                new Role("s"),
                 new Role("admin")
         );
     }
 
+    //security
     public void persist(List<?> entities) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -129,16 +116,32 @@ public class Populator {
         }
     }
 
+    //security
+    public void persistRoleIfNotExists(Role role) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+
+            Role existingRole = em.find(Role.class, role.getRoleName());
+            if (existingRole == null) {
+                em.persist(role);
+            }
+
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
 
     public void clearDatabase() {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
+
             em.createQuery("DELETE FROM Meal").executeUpdate();
             em.createQuery("DELETE FROM Ingredients").executeUpdate();
             em.createQuery("DELETE FROM User").executeUpdate();
             em.createQuery("DELETE FROM Role").executeUpdate();
-            em.createNativeQuery("ALTER SEQUENCE meal_meal_id_seq RESTART WITH 1").executeUpdate();
-            em.createNativeQuery("ALTER SEQUENCE ingredients_id_seq RESTART WITH 1").executeUpdate();
+
             em.getTransaction().commit();
         }
     }

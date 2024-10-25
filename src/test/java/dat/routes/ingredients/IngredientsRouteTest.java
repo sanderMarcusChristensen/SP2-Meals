@@ -4,6 +4,7 @@ import dat.config.AppConfig;
 import dat.config.HibernateConfig;
 import dat.daos.impl.IngredientsDAO;
 import dat.dtos.IngredientsDTO;
+import dat.utils.ApiProperties;
 import io.javalin.Javalin;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.*;
@@ -30,7 +31,7 @@ class IngredientsRouteTest {
 
     @BeforeAll
     static void init() {
-        app = AppConfig.startServer(); // Start the server using AppConfig
+        app = AppConfig.startServer(ApiProperties.PORT); // Start the server using AppConfig
     }
 
     @BeforeEach

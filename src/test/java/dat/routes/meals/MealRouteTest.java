@@ -6,9 +6,6 @@ import dat.daos.impl.MealDAO;
 import dat.dtos.IngredientsDTO;
 import dat.dtos.MealDTO;
 import dat.entities.Meal;
-import dat.security.daos.SecurityDAO;
-import dat.security.entities.Role;
-import dat.security.entities.User;
 import dat.utils.ApiProperties;
 import io.javalin.Javalin;
 import jakarta.persistence.EntityManagerFactory;
@@ -19,11 +16,9 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MealRouteTest {
@@ -51,12 +46,6 @@ class MealRouteTest {
         m1 = meals.get(0);
         m2 = meals.get(1);
         m3 = meals.get(2);
-
-//        List<Role> roles = populator.createRoles();
-//        populator.persist(roles);
-//
-//        List<User> users = populator.createUsers(roles);
-//        populator.persist(users);
     }
 
     @AfterEach
