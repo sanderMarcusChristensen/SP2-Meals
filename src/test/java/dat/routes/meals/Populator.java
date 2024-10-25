@@ -4,15 +4,21 @@ import dat.daos.impl.MealDAO;
 import dat.dtos.MealDTO;
 import dat.entities.Ingredients;
 import dat.entities.Meal;
+import dat.security.daos.SecurityDAO;
+import dat.security.entities.Role;
+import dat.security.entities.User;
+import dk.bugelhartmann.UserDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
+import java.util.Set;
 
 public class Populator {
 
     private static EntityManagerFactory emf;
     private static MealDAO mealDAO;
+    private static SecurityDAO securityDAO;
 
     public Populator(EntityManagerFactory emf, MealDAO mealDAO) {
         this.emf = emf;
@@ -48,7 +54,6 @@ public class Populator {
                 new Ingredients("Mozzarella cheese", "100g")
         ));
 
-
         Meal m3 = Meal.builder()
                 .mealName("Pasta")
                 .mealDescription("A delicious pasta")
@@ -62,6 +67,14 @@ public class Populator {
                 new Ingredients("Parmesan cheese", "50g")
         ));
 
+        User u1 = new User("userTest", "userTest");
+        u1.setRoles(Set.of(new Role("user")));
+
+        User u2 = new User("adminTest", "adminTest");
+        u2.setRoles(Set.of(new Role("admin")));
+        Role user = u1.getRoles().iterator().next();
+        Role admin = u2.getRoles().iterator().next();
+
         MealDTO mDTO1 = new MealDTO(m1);
         MealDTO mDTO2 = new MealDTO(m2);
         MealDTO mDTO3 = new MealDTO(m3);
@@ -69,13 +82,61 @@ public class Populator {
         mealDAO.create(mDTO1);
         mealDAO.create(mDTO2);
         mealDAO.create(mDTO3);
+
+        try(EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            em.persist(user);
+            em.persist(admin);
+            em.persist(u1);
+            em.persist(u2);
+            em.getTransaction().commit();
+        }
     }
+
+    public List<User> createUsers() {
+        List<Role> roles = createRoles();
+        return List.of(
+                new User(
+                        "User1",
+                        "1234",
+                        Set.of(roles.get(0))
+                ),
+                new User(
+                        "User2",
+                        "1234",
+                        Set.of(roles.get(0))
+                ),
+                new User(
+                        "Admin1",
+                        "1234",
+                        Set.of(roles.get(1))
+                )
+        );
+    }
+
+    public List<Role> createRoles() {
+        return List.of(
+                new Role("user"),
+                new Role("admin")
+        );
+    }
+
+    public void persist(List<?> entities) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            entities.forEach(em::persist);
+            em.getTransaction().commit();
+        }
+    }
+
 
     public void clearDatabase() {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.createQuery("DELETE FROM Meal").executeUpdate();
             em.createQuery("DELETE FROM Ingredients").executeUpdate();
+            em.createQuery("DELETE FROM User").executeUpdate();
+            em.createQuery("DELETE FROM Role").executeUpdate();
             em.createNativeQuery("ALTER SEQUENCE meal_meal_id_seq RESTART WITH 1").executeUpdate();
             em.createNativeQuery("ALTER SEQUENCE ingredients_id_seq RESTART WITH 1").executeUpdate();
             em.getTransaction().commit();

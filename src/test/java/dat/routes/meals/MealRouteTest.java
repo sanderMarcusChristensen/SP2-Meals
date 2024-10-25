@@ -6,6 +6,10 @@ import dat.daos.impl.MealDAO;
 import dat.dtos.IngredientsDTO;
 import dat.dtos.MealDTO;
 import dat.entities.Meal;
+import dat.security.daos.SecurityDAO;
+import dat.security.entities.Role;
+import dat.security.entities.User;
+import dat.utils.ApiProperties;
 import io.javalin.Javalin;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.*;
@@ -25,16 +29,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class MealRouteTest {
     private static Javalin app;
     private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
-    private static String BASE_URL = "http://localhost:7007/api";
     private static MealDAO mealDAO = MealDAO.getInstance(emf);
     private static Populator populator = new Populator(emf, mealDAO);
+    private static String BASE_URL = "http://localhost:7007/api";
 
     private static Meal m1, m2, m3;
     private static List<Meal> meals;
 
+    private String jwtTokenUser;
+    private String jwtTokenAdmin;
+
     @BeforeAll
     void beforeAll() {
-        app = AppConfig.startServer();
+        app = AppConfig.startServer(ApiProperties.PORT);
     }
 
     @BeforeEach
@@ -44,6 +51,12 @@ class MealRouteTest {
         m1 = meals.get(0);
         m2 = meals.get(1);
         m3 = meals.get(2);
+
+//        List<Role> roles = populator.createRoles();
+//        populator.persist(roles);
+//
+//        List<User> users = populator.createUsers(roles);
+//        populator.persist(users);
     }
 
     @AfterEach
@@ -93,6 +106,7 @@ class MealRouteTest {
         mealDTO.setIngredients(List.of(new IngredientsDTO("Rice", "200g"), new IngredientsDTO("Salmon", "100g")));
         Meal meal =
                 given()
+                        .header("Authorization", "Bearer " + jwtTokenAdmin)
                         .contentType("application/json")
                         .body(mealDTO)
                         .when()
@@ -113,6 +127,7 @@ class MealRouteTest {
         mealDTO.setIngredients(List.of(new IngredientsDTO("Rice", "200g"), new IngredientsDTO("Salmon", "100g")));
         Meal meal =
                 given()
+                        .header("Authorization", "Bearer " + jwtTokenAdmin)
                         .contentType("application/json")
                         .body(mealDTO)
                         .when()
@@ -148,6 +163,7 @@ class MealRouteTest {
     @DisplayName("Test delete meal")
     void deleteMeal() {
         given()
+                .header("Authorization", "Bearer " + jwtTokenAdmin)
                 .when()
                 .get(BASE_URL + "/meals/" + m1.getMealId())
                 .then()
