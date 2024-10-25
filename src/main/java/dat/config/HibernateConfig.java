@@ -11,8 +11,8 @@ import org.hibernate.service.ServiceRegistry;
 import org.hibernate.cfg.Configuration;
 import java.util.Properties;
 
-import static dat.util.ApiProperties.DB_PASS;
-import static dat.util.ApiProperties.DB_USER;
+import static dat.utils.ApiProperties.DB_PASS;
+import static dat.utils.ApiProperties.DB_USER;
 
 /**
  * Purpose: This class is used to configure Hibernate and create an EntityManagerFactory.
@@ -52,6 +52,8 @@ public class HibernateConfig {
     private static void getAnnotationConfiguration(Configuration configuration) {
         configuration.addAnnotatedClass(Meal.class);
         configuration.addAnnotatedClass(Ingredients.class);
+        configuration.addAnnotatedClass(dat.security.entities.User.class);
+        configuration.addAnnotatedClass(dat.security.entities.Role.class);
     }
 
     private static EntityManagerFactory createEMF(boolean forTest, String DBName) {
