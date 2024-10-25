@@ -128,32 +128,18 @@ public class MealDAO implements IDAO<MealDTO, Integer> {
     }
 
     public void delete(Integer mealId) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
 
-        try {
-            // Find the meal to delete
             Meal meal = em.find(Meal.class, mealId);
-            if (meal == null) {
-                throw new ApiException(404, "Meal not found");
+            if (meal != null) {
+                // Clear ingredients associations to delete join table entries
+                meal.getIngredients().clear();
+                em.remove(meal);
             }
-
-            // Remove the meal from all ingredients that reference it
-            for (Ingredients ingredient : meal.getIngredients()) {
-                ingredient.get().remove(meal);  // Assuming you have a getMeals() method in Ingredients
-                em.merge(ingredient); // Update the ingredient in the database
-            }
-
-            // Now remove the meal
-            em.remove(meal);
             em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback(); // Rollback on error
-            e.printStackTrace();
-            throw new ApiException(500, "Something went wrong trying to delete a meal");
-        } finally {
-            em.close(); // Ensure entity manager is closed
         }
+
     }
 
     public List<MealDTO> maxPrepTime(int prepTime) {
