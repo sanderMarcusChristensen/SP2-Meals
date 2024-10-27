@@ -19,6 +19,9 @@
         <jbcrypt.version>0.4</jbcrypt.version>
         <token.security.version>1.0.4</token.security.version>
 
+        <!--  Javalin    -->
+        <javalin.port>8008</javalin.port>
+
     </properties>
 
     <repositories>
