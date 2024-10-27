@@ -62,6 +62,14 @@ public class IngredientsDAO implements IDAO<IngredientsDTO, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
 
+            if (ingredientsDTO.getName() == null) {
+                throw new IllegalArgumentException("Ingredient name is required");
+            }
+
+            if (ingredientsDTO.getQuantity() == null) {
+                throw new IllegalArgumentException("Quantity is required");
+            }
+
             TypedQuery<Ingredients> query = em.createQuery("SELECT i FROM Ingredients i WHERE i.name = :name", Ingredients.class);
             query.setParameter("name", ingredients.getName());
 
@@ -99,10 +107,11 @@ public class IngredientsDAO implements IDAO<IngredientsDTO, Integer> {
             em.merge(ingredients);
             em.getTransaction().commit();
             return new IngredientsDTO(ingredients);
+
         } catch (Exception e) {
             e.printStackTrace();
+            throw new ApiException(500,"Something went wrong trying to update an ingredient");
         }
-        return null;
     }
 
     @Override
@@ -134,7 +143,7 @@ public class IngredientsDAO implements IDAO<IngredientsDTO, Integer> {
         } catch (Exception e) {
             em.getTransaction().rollback(); // Rollback on error
             e.printStackTrace();
-            throw new ApiException(500, "Something went wrong trying to delete an ingredient");
+            throw new IllegalArgumentException("Something went wrong trying to delete an ingredient");
         } finally {
             em.close(); // Ensure entity manager is closed
         }
