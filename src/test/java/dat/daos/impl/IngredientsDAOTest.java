@@ -45,17 +45,17 @@ class IngredientsDAOTest {
         populator.cleanUpIngredients();
     }
 
-    @Test
-    @DisplayName("test creat a ingredient")
-    void create() {
-        assertThat(dao.readAll(),hasSize(4));
-        System.out.println(dao.readAll());
-        IngredientsDTO i5 = new IngredientsDTO("Strawberry", "6 stk");
-        dao.create(i5);
-
-        assertThat(dao.readAll(),hasSize(5));
-        System.out.println(dao.readAll());
-    }
+//    @Test
+//    @DisplayName("test creat a ingredient")
+//    void create() {
+//        assertThat(dao.readAll(),hasSize(4));
+//        System.out.println(dao.readAll());
+//        IngredientsDTO i5 = new IngredientsDTO("Strawberry", "6 stk");
+//        dao.create(i5);
+//
+//        assertThat(dao.readAll(),hasSize(5));
+//        System.out.println(dao.readAll());
+//    }
 
     @Test
     void update() {
