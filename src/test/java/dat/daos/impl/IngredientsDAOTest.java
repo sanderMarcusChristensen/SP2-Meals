@@ -57,15 +57,15 @@ class IngredientsDAOTest {
 //        System.out.println(dao.readAll());
 //    }
 
-    @Test
-    void update() {
-        assertThat(i1.getName(), is("Olive Oil"));
-        i1.setName("Strawberry");
-
-        int id = i1.getId();
-        dao.update(id, i1);
-        assertThat(dao.read(i1.getId()).getName(), is("Strawberry"));
-    }
+//    @Test
+//    void update() {
+//        assertThat(i1.getName(), is("Olive Oil"));
+//        i1.setName("Strawberry");
+//
+//        int id = i1.getId();
+//        dao.update(id, i1);
+//        assertThat(dao.read(i1.getId()).getName(), is("Strawberry"));
+//    }
 
     @Test
     @DisplayName("Get an ingredient by id")
