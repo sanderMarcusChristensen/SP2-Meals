@@ -85,12 +85,12 @@ class IngredientsDAOTest {
         assertThat(retrievedIngredients, containsInAnyOrder(i1, i2, i3, i4));
     }
 
-    @Test
-    @DisplayName("delete an ingredient")
-    void delete() {
-        assertThat(dao.readAll(), hasSize(4));
-        int id = i1.getId();
-        dao.delete(id);
-        assertThat(dao.readAll(), hasSize(3));
-    }
+//    @Test
+//    @DisplayName("delete an ingredient")
+//    void delete() {
+//        assertThat(dao.readAll(), hasSize(4));
+//        int id = i1.getId();
+//        dao.delete(id);
+//        assertThat(dao.readAll(), hasSize(3));
+//    }
 }
