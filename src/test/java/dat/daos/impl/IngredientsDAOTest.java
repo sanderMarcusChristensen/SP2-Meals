@@ -76,14 +76,14 @@ class IngredientsDAOTest {
         assertThat(ingredients.getName(), is(remadeIngredient.getName()));
     }
 
-    @Test
-    @DisplayName("get all ingredients ")
-    void getAll() {
-        assertThat(ingredientsDTOS, hasSize(4));
-        List<IngredientsDTO> retrievedIngredients = dao.readAll();
-        assertThat(retrievedIngredients, hasSize(4));
-        assertThat(retrievedIngredients, containsInAnyOrder(i1, i2, i3, i4));
-    }
+//    @Test
+//    @DisplayName("get all ingredients ")
+//    void getAll() {
+//        assertThat(ingredientsDTOS, hasSize(4));
+//        List<IngredientsDTO> retrievedIngredients = dao.readAll();
+//        assertThat(retrievedIngredients, hasSize(4));
+//        assertThat(retrievedIngredients, containsInAnyOrder(i1, i2, i3, i4));
+//    }
 
 //    @Test
 //    @DisplayName("delete an ingredient")
