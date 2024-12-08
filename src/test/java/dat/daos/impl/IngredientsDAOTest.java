@@ -45,27 +45,27 @@ class IngredientsDAOTest {
         populator.cleanUpIngredients();
     }
 
-//    @Test
-//    @DisplayName("test creat a ingredient")
-//    void create() {
-//        assertThat(dao.readAll(),hasSize(4));
-//        System.out.println(dao.readAll());
-//        IngredientsDTO i5 = new IngredientsDTO("Strawberry", "6 stk");
-//        dao.create(i5);
-//
-//        assertThat(dao.readAll(),hasSize(5));
-//        System.out.println(dao.readAll());
-//    }
+    @Test
+    @DisplayName("test creat a ingredient")
+    void create() {
+        assertThat(dao.readAll(),hasSize(4));
+        System.out.println(dao.readAll());
+        IngredientsDTO i5 = new IngredientsDTO("Strawberry", "6 stk");
+        dao.create(i5);
 
-//    @Test
-//    void update() {
-//        assertThat(i1.getName(), is("Olive Oil"));
-//        i1.setName("Strawberry");
-//
-//        int id = i1.getId();
-//        dao.update(id, i1);
-//        assertThat(dao.read(i1.getId()).getName(), is("Strawberry"));
-//    }
+        assertThat(dao.readAll(),hasSize(5));
+        System.out.println(dao.readAll());
+    }
+
+    @Test
+    void update() {
+        assertThat(i1.getName(), is("Olive Oil"));
+        i1.setName("Strawberry");
+
+        int id = i1.getId();
+        dao.update(id, i1);
+        assertThat(dao.read(i1.getId()).getName(), is("Strawberry"));
+    }
 
     @Test
     @DisplayName("Get an ingredient by id")
@@ -76,21 +76,21 @@ class IngredientsDAOTest {
         assertThat(ingredients.getName(), is(remadeIngredient.getName()));
     }
 
-//    @Test
-//    @DisplayName("get all ingredients ")
-//    void getAll() {
-//        assertThat(ingredientsDTOS, hasSize(4));
-//        List<IngredientsDTO> retrievedIngredients = dao.readAll();
-//        assertThat(retrievedIngredients, hasSize(4));
-//        assertThat(retrievedIngredients, containsInAnyOrder(i1, i2, i3, i4));
-//    }
+    @Test
+    @DisplayName("get all ingredients ")
+    void getAll() {
+        assertThat(ingredientsDTOS, hasSize(4));
+        List<IngredientsDTO> retrievedIngredients = dao.readAll();
+        assertThat(retrievedIngredients, hasSize(4));
+        assertThat(retrievedIngredients, containsInAnyOrder(i1, i2, i3, i4));
+    }
 
-//    @Test
-//    @DisplayName("delete an ingredient")
-//    void delete() {
-//        assertThat(dao.readAll(), hasSize(4));
-//        int id = i1.getId();
-//        dao.delete(id);
-//        assertThat(dao.readAll(), hasSize(3));
-//    }
+    @Test
+    @DisplayName("delete an ingredient")
+    void delete() {
+        assertThat(dao.readAll(), hasSize(4));
+        int id = i1.getId();
+        dao.delete(id);
+        assertThat(dao.readAll(), hasSize(3));
+    }
 }
