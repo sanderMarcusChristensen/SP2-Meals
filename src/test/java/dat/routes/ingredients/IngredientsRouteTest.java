@@ -21,8 +21,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+
 class IngredientsRouteTest {
+
 
     private static Javalin app;
     private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
