@@ -33,8 +33,7 @@ state SignUp {
 
 state AdminPage {
     AdminPage --> ManageMeals: Perform CRUD operations on meal entries.
-    AdminPage --> ManageUsers: Manage user accounts (view, delete, update details).
-    AdminPage --> ViewStatistics: View website statistics and usage analytics.
+
 
     state ManageMeals {
         ManageMeals --> CreateMeal: Add new meal entries.
