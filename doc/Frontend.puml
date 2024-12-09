@@ -1,0 +1,49 @@
+@startuml
+[*] --> Homepage : Googling "smmCooking.nerdshub.dk"
+
+state Homepage {
+    Homepage --> Search: Search for different meals at the top of the page.
+    Homepage --> Recommended_Bestseller: Featured best-sellers in the middle of the page.
+    Homepage --> Login: Login button at the top left/right corner.
+    Homepage --> Meals: Scroll to the bottom to see all available meals.
+}
+
+Meals --> MealsPage: Clicking a meal navigates to its detail page.
+Recommended_Bestseller --> MealsPage: Clicking a bestseller navigates to its detail page.
+
+state Search {
+    Search --> Type: Search box for meal lookup.
+    Type --> MealsPage: Redirects to the meals page showing relevant results.
+}
+
+state MealsPage {
+    MealsPage --> MealsInfo: Displays details like rating, ingredients, preparation time, etc.
+}
+
+state Login {
+    Login --> UserInfo: Log in with existing account credentials.
+    Login --> SignUp: Option to create a new account.
+    UserInfo --> Homepage: Redirects to the homepage after login.
+}
+
+state SignUp {
+    SignUp --> NewUser: User registration process.
+    NewUser --> Homepage: Redirects to the homepage upon successful registration.
+}
+
+state AdminPage {
+    AdminPage --> ManageMeals: Perform CRUD operations on meal entries.
+    AdminPage --> ManageUsers: Manage user accounts (view, delete, update details).
+    AdminPage --> ViewStatistics: View website statistics and usage analytics.
+
+    state ManageMeals {
+        ManageMeals --> CreateMeal: Add new meal entries.
+        ManageMeals --> UpdateMeal: Edit existing meal entries.
+        ManageMeals --> DeleteMeal: Remove meal entries.
+        ManageMeals --> ViewMeals: Display all meal entries.
+    }
+
+}
+
+[*] --> AdminPage: Navigate to admin dashboard from a secure URL or login.
+@enduml
