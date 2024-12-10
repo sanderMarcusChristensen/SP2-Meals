@@ -41,7 +41,7 @@ public class Populate {
         ingredients1.add(new Ingredients("Tomato sauce", "200ml"));
         ingredients1.add(new Ingredients("Onion", "1 medium"));
         ingredients1.add(new Ingredients("Garlic", "2 cloves"));
-        Meal meal1 = new Meal("Spaghetti Bolognese", "Classic Italian pasta with meat sauce", "Cook pasta, prepare sauce", 45.0, 4.5);
+        Meal meal1 = new Meal("Spaghetti Bolo", "Classic Italian pasta with meat sauce", "Cook pasta, prepare sauce", 45.0, 4.5);
         meal1.setIngredients(ingredients1);
 
         // Chicken Caesar Salad
