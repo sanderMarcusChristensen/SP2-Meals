@@ -47,7 +47,7 @@ public class SecurityController implements ISecurityController {
         if (instance == null) {
             instance = new SecurityController();
         }
-        securityDAO = new SecurityDAO(HibernateConfig.getEntityManagerFactory("meals"));
+        securityDAO = new SecurityDAO(HibernateConfig.getEntityManagerFactory());
         return instance;
     }
 

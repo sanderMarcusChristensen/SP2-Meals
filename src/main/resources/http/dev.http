@@ -105,7 +105,7 @@ GET {{url}}/meals/prepTime/30
 
 ### --------------------  Ingredients ENDPOINTS  ------------------------------
 
-POST http://localhost:7007/api/ingredients
+POST http://localhost:8008/api/ingredients
 Content-Type: application/json
 
 {
@@ -115,15 +115,15 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:7007/api/ingredients/3
+GET http://localhost:8008/api/ingredients/3
 
 ###
 
-GET http://localhost:7007/api/ingredients
+GET http://localhost:8008/api/ingredients
 
 ###
 
-PUT http://localhost:7007/api/ingredients/2
+PUT http://localhost:8008/api/ingredients/2
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -134,4 +134,4 @@ Authorization: Bearer {{jwt_token}}
 
 ###
 
-DELETE http://localhost:7007/api/ingredients/1
+DELETE http://localhost:8008/api/ingredients/1

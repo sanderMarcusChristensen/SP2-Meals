@@ -1,0 +1,377 @@
+@startuml
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class AccessController {
+  ~ securityController: SecurityController
+  + accessHandler(Context): void
+}
+class ApiException {
+  - statusCode: int
+  + getStatusCode(): int
+}
+class ApiException {
+  - code: int
+  + getCode(): int
+}
+class ApiProperties {
+  + PORT: int
+  + API_CONTEXT: String
+  + DB_USER: String
+  + DB_PASS: String
+}
+class AppConfig {
+  - securityController: SecurityController
+  - jsonMapper: ObjectMapper
+  - logger: Logger
+  - routes: Routes
+  - accessController: AccessController
+  + startServer(int): Javalin
+  + stopServer(Javalin): void
+  + configuration(JavalinConfig): void
+  - generalExceptionHandler(Exception, Context): void
+  + apiExceptionHandler(ApiException, Context): void
+  - corsHeadersOptions(Context): void
+  - corsHeaders(Context): void
+}
+class ExceptionController {
+  - log: Logger
+  + apiExceptionsHandler(ApiException, Context): void
+}
+class HibernateConfig {
+  - emf: EntityManagerFactory
+  - emfTest: EntityManagerFactory
+  - isTest: Boolean
+  - setDeployedProperties(Properties): Properties
+  + getEntityManagerFactoryForTest(): EntityManagerFactory
+  - setDevProperties(Properties): Properties
+  - setBaseProperties(Properties): Properties
+  + getEntityManagerFactory(): EntityManagerFactory
+  + setTest(Boolean): void
+  - getAnnotationConfiguration(Configuration): void
+  + getTest(): Boolean
+  - setTestProperties(Properties): Properties
+  - createEMF(boolean): EntityManagerFactory
+}
+interface IAccessController << interface >> {
+  + accessHandler(Context): void
+}
+interface IController<T, D> << interface >> {
+  + validateEntity(Context): T
+  + update(Context): void
+  + read(Context): void
+  + readAll(Context): void
+  + validatePrimaryKey(D): boolean
+  + delete(Context): void
+  + create(Context): void
+}
+interface IDAO<T, I> << interface >> {
+  + validatePrimaryKey(I): boolean
+  + readAll(): List<T>
+  + create(T): T
+  + delete(I): void
+  + read(I): T
+  + update(I, T): T
+}
+interface ISecurityController << interface >> {
+  + register(): Handler
+  + authorize(UserDTO, Set<RouteRole>): boolean
+  + verifyToken(String): UserDTO
+  + login(): Handler
+  + createToken(UserDTO): String
+  + authenticate(): Handler
+}
+interface ISecurityDAO << interface >> {
+  + addRole(UserDTO, String): User
+  + getVerifiedUser(String, String): UserDTO
+  + createUser(String, String): User
+}
+interface ISecurityUser << interface >> {
+  + addRole(Role): void
+  + verifyPassword(String): boolean
+}
+class Ingredients {
+  - name: String
+  - quantity: String
+  - id: Integer
+  + getId(): Integer
+  + getName(): String
+  + getQuantity(): String
+  + setId(Integer): void
+  + setName(String): void
+  + setQuantity(String): void
+  + toString(): String
+  + equals(Object): boolean
+  + hashCode(): int
+}
+class IngredientsController {
+  - dao: IngredientsDAO
+  + validateEntity(Context): IngredientsDTO
+  + read(Context): void
+  + readAll(Context): void
+  + create(Context): void
+  + validatePrimaryKey(Integer): boolean
+  + delete(Context): void
+  + update(Context): void
+}
+class IngredientsDAO {
+  - emf: EntityManagerFactory
+  - instance: IngredientsDAO
+  + readAll(): List<IngredientsDTO>
+  + update(Integer, IngredientsDTO): IngredientsDTO
+  + read(Integer): IngredientsDTO
+  + validatePrimaryKey(Integer): boolean
+  + getInstance(EntityManagerFactory): IngredientsDAO
+  + delete(Integer): void
+  + create(IngredientsDTO): IngredientsDTO
+}
+class IngredientsDTO {
+  - id: Integer
+  - name: String
+  - quantity: String
+  + getId(): Integer
+  + getName(): String
+  + getQuantity(): String
+  + setId(Integer): void
+  + setName(String): void
+  + setQuantity(String): void
+  + toString(): String
+  + equals(Object): boolean
+  + hashCode(): int
+}
+class IngredientsRoute {
+  - ingredientsController: IngredientsController
+  # getIngredientsRoutes(): EndpointGroup
+}
+class Main {
+  + main(String[]): void
+}
+class Meal {
+  - mealInstructions: String
+  - mealId: Integer
+  - mealDescription: String
+  - ingredients: List<Ingredients>
+  - mealRating: double
+  - mealPrepTime: double
+  - mealName: String
+  + getMealDescription(): String
+  + toString(): String
+  + getMealId(): Integer
+  + setMealPrepTime(double): void
+  + setMealRating(double): void
+  + setMealName(String): void
+  + getMealName(): String
+  + getMealInstructions(): String
+  + setMealId(Integer): void
+  + setMealInstructions(String): void
+  + setIngredients(List<Ingredients>): void
+  + getMealPrepTime(): double
+  + getMealRating(): double
+  + getIngredients(): List<Ingredients>
+  + setMealDescription(String): void
+  + builder(): MealBuilder
+  + toMealList(List<MealDTO>): List<Meal>
+  + hashCode(): int
+  + equals(Object): boolean
+}
+class MealController {
+  - dao: MealDAO
+  + maxPrepTime(Context): void
+  + validateEntity(Context): MealDTO
+  + readAll(Context): void
+  + read(Context): void
+  + delete(Context): void
+  + validatePrimaryKey(Integer): boolean
+  + create(Context): void
+  + update(Context): void
+}
+class MealDAO {
+  - instance: MealDAO
+  - emf: EntityManagerFactory
+  + readAll(): List<MealDTO>
+  + maxPrepTime(int): List<MealDTO>
+  + validatePrimaryKey(Integer): boolean
+  + findIngredient(EntityManager, IngredientsDTO): Ingredients
+  + update(Integer, MealDTO): MealDTO
+  + delete(Integer): void
+  + getInstance(EntityManagerFactory): MealDAO
+  + read(Integer): MealDTO
+  + create(MealDTO): MealDTO
+}
+class MealDTO {
+  - ingredients: List<IngredientsDTO>
+  - mealRating: double
+  - mealId: Integer
+  - mealDescription: String
+  - mealInstructions: String
+  - mealPrepTime: double
+  - mealName: String
+  + getMealId(): Integer
+  + getMealName(): String
+  + getMealDescription(): String
+  + getMealInstructions(): String
+  + setMealPrepTime(double): void
+  + setMealInstructions(String): void
+  + getMealPrepTime(): double
+  + getMealRating(): double
+  + setMealRating(double): void
+  + setIngredients(List<IngredientsDTO>): void
+  + getIngredients(): List<IngredientsDTO>
+  + setMealId(Integer): void
+  + setMealDescription(String): void
+  + setMealName(String): void
+  + equals(Object): boolean
+  + hashCode(): int
+  + toMealDTOList(List<Meal>): List<MealDTO>
+}
+class MealRoute {
+  - mealController: MealController
+  # getMealRoutes(): EndpointGroup
+}
+entity Message << record >> {
+  - status: int
+  - message: String
+  + message(): String
+  + status(): int
+}
+class NotAuthorizedException {
+  - statusCode: int
+  + getStatusCode(): int
+}
+class NotAuthorizedException {
+  - statusCode: int
+  + getStatusCode(): int
+}
+class Populate {
+  + main(String[]): void
+  - getMeals(): Set<Meal>
+}
+enum Role << enumeration >> {
+  + ANYONE:
+  + ADMIN:
+  + USER:
+  + SUPERMAN:
+  + values(): Role[]
+  + valueOf(String): Role
+}
+class Role {
+  - serialVersionUID: long
+  - name: String
+  - users: Set<User>
+  + getUsers(): Set<User>
+  + getRoleName(): String
+  + toString(): String
+}
+class Routes {
+  - mealRoutes: MealRoute
+  - ingredientsRoutes: IngredientsRoute
+  + getApiRoutes(): EndpointGroup
+}
+class SecurityController {
+  - securityDAO: ISecurityDAO
+  ~ objectMapper: ObjectMapper
+  - logger: Logger
+  ~ tokenSecurity: ITokenSecurity
+  - instance: SecurityController
+  + getInstance(): SecurityController
+  + authenticate(): Handler
+  + createToken(UserDTO): String
+  + verifyToken(String): UserDTO
+  + login(): Handler
+  + register(): Handler
+  + authorize(UserDTO, Set<RouteRole>): boolean
+  + addRole(): Handler
+}
+class SecurityDAO {
+  - instance: SecurityDAO
+  - emf: EntityManagerFactory
+  + getInstance(EntityManagerFactory): SecurityDAO
+  - getEntityManager(): EntityManager
+  + getVerifiedUser(String, String): UserDTO
+  + createUser(String, String): User
+  + addRole(UserDTO, String): User
+}
+class SecurityRoutes {
+  - jsonMapper: ObjectMapper
+  - securityController: SecurityController
+  + getSecuredRoutes(): EndpointGroup
+  + getSecurityRoutes(): EndpointGroup
+}
+class User {
+  - serialVersionUID: long
+  - username: String
+  - password: String
+  - roles: Set<Role>
+  + getUsername(): String
+  + getPassword(): String
+  + getRoles(): Set<Role>
+  + setUsername(String): void
+  + setPassword(String): void
+  + setRoles(Set<Role>): void
+  + toString(): String
+  + getRolesAsStrings(): Set<String>
+  + removeRole(String): void
+  + addRole(Role): void
+  + verifyPassword(String): boolean
+}
+class Utils {
+  + convertToJsonMessage(Context, String, String): String
+  + main(String[]): void
+  + getPropertyValue(String, String): String
+  + getObjectMapper(): ObjectMapper
+}
+class ValidationException
+class ValidationException
+
+AccessController        -[#008200,dashed]-^  IAccessController
+AccessController       "1" *-[#595959,plain]-> "securityController\n1" SecurityController
+AppConfig              "1" *-[#595959,plain]-> "accessController\n1" AccessController
+AppConfig               -[#595959,dashed]->  AccessController       : "«create»"
+AppConfig              "1" *-[#595959,plain]-> "routes\n1" Routes
+AppConfig               -[#595959,dashed]->  Routes                 : "«create»"
+AppConfig              "1" *-[#595959,plain]-> "securityController\n1" SecurityController
+AppConfig               -[#595959,dashed]->  Utils                  : "«create»"
+ExceptionController     -[#595959,dashed]->  Message                : "«create»"
+IngredientsController   -[#595959,dashed]->  ApiException           : "«create»"
+IngredientsController   -[#008200,dashed]-^  IController
+IngredientsController  "1" *-[#595959,plain]-> "dao\n1" IngredientsDAO
+IngredientsDAO          -[#595959,dashed]->  ApiException           : "«create»"
+IngredientsDAO          -[#008200,dashed]-^  IDAO
+IngredientsDAO          -[#595959,dashed]->  Ingredients            : "«create»"
+IngredientsDAO          -[#595959,dashed]->  IngredientsDTO         : "«create»"
+IngredientsRoute       "1" *-[#595959,plain]-> "ingredientsController\n1" IngredientsController
+IngredientsRoute        -[#595959,dashed]->  IngredientsController  : "«create»"
+Meal                   "1" *-[#595959,plain]-> "ingredients\n*" Ingredients
+MealController          -[#008200,dashed]-^  IController
+MealController         "1" *-[#595959,plain]-> "dao\n1" MealDAO
+MealDAO                 -[#008200,dashed]-^  IDAO
+MealDAO                 -[#595959,dashed]->  Ingredients            : "«create»"
+MealDAO                 -[#595959,dashed]->  Meal                   : "«create»"
+MealDAO                 -[#595959,dashed]->  MealDTO                : "«create»"
+MealDTO                "1" *-[#595959,plain]-> "ingredients\n*" IngredientsDTO
+MealRoute              "1" *-[#595959,plain]-> "mealController\n1" MealController
+MealRoute               -[#595959,dashed]->  MealController         : "«create»"
+Populate                -[#595959,dashed]->  Ingredients            : "«create»"
+Populate                -[#595959,dashed]->  Meal                   : "«create»"
+Role                   "1" *-[#595959,plain]-> "users\n*" User
+Routes                  -[#595959,dashed]->  IngredientsRoute       : "«create»"
+Routes                 "1" *-[#595959,plain]-> "ingredientsRoutes\n1" IngredientsRoute
+Routes                 "1" *-[#595959,plain]-> "mealRoutes\n1" MealRoute
+Routes                  -[#595959,dashed]->  MealRoute              : "«create»"
+SecurityController      -[#595959,dashed]->  ApiException           : "«create»"
+SecurityController      -[#008200,dashed]-^  ISecurityController
+SecurityController     "1" *-[#595959,plain]-> "securityDAO\n1" ISecurityDAO
+SecurityController      -[#595959,dashed]->  NotAuthorizedException : "«create»"
+SecurityController      -[#595959,dashed]->  SecurityDAO            : "«create»"
+SecurityDAO             -[#595959,dashed]->  ApiException           : "«create»"
+SecurityDAO             -[#008200,dashed]-^  ISecurityDAO
+SecurityDAO             -[#595959,dashed]->  Role                   : "«create»"
+SecurityDAO             -[#595959,dashed]->  User                   : "«create»"
+SecurityDAO             -[#595959,dashed]->  ValidationException    : "«create»"
+SecurityRoutes         "1" *-[#595959,plain]-> "securityController\n1" SecurityController
+SecurityRoutes          -[#595959,dashed]->  Utils                  : "«create»"
+User                    -[#008200,dashed]-^  ISecurityUser
+User                   "1" *-[#595959,plain]-> "roles\n*" Role
+Utils                   -[#595959,dashed]->  ApiException           : "«create»"
+@enduml

@@ -6,7 +6,7 @@ public class ApiProperties {
     public static final String DB_PASS = "postgres";
 
     // == API CONFIG ==
-    public static final int PORT = 7007;
+    public static final int PORT = 8008;
     public static final String API_CONTEXT = "/api";
 
 }

@@ -41,7 +41,8 @@ public class IngredientsDAO implements IDAO<IngredientsDTO, Integer> {
             }
             em.getTransaction().commit();
             return null;
-        } catch (Exception e) {
+        } catch (ApiException e) {
+            e.getMessage();
             e.printStackTrace();
         }
         return null;

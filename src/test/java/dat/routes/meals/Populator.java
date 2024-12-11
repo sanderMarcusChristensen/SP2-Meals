@@ -20,9 +20,9 @@ public class Populator {
     private static EntityManagerFactory emf;
     private static MealDAO mealDAO;
 
-    public Populator(EntityManagerFactory emf, MealDAO mealDAO) {
-        this.emf = emf;
-        this.mealDAO = mealDAO;
+    public Populator(EntityManagerFactory emf_, MealDAO mealDAO_) {
+        this.emf = emf_;
+        this.mealDAO = mealDAO_;
     }
 
     public void populateDatabase() {

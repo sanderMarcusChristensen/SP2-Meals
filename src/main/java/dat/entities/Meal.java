@@ -29,11 +29,11 @@ public class Meal {
     private String mealName;
 
     @Setter
-    @Column(name = "meal_description", nullable = false)
+    @Column(name = "meal_description", nullable = false, length = 1000)
     private String mealDescription;
 
     @Setter
-    @Column(name = "meal_instructions", nullable = false)
+    @Column(name = "meal_instructions", nullable = false, length = 1000)
     private String mealInstructions;
 
     @Setter

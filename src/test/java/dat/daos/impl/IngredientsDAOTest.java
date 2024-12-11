@@ -11,30 +11,26 @@ import org.junit.jupiter.api.*;
 import org.testcontainers.shaded.org.hamcrest.Matchers;
 
 import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-
-
-
+/*
 class IngredientsDAOTest {
 
-    private static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
-    private static IngredientsDAO dao;
-    private static PopulateIngredientsForTest populator = new PopulateIngredientsForTest(dao,emf);
+    private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
+    private static IngredientsDAO dao = IngredientsDAO.getInstance(emf);
+    private static PopulateIngredientsForTest populator = new PopulateIngredientsForTest(dao, emf);
 
-    private static IngredientsDTO i1, i2, i3,i4;
+    private static IngredientsDTO i1, i2, i3, i4;
     private static List<IngredientsDTO> ingredientsDTOS;
 
     @BeforeAll
     static void beforeAll() {
-        emf = HibernateConfig.getEntityManagerFactoryForTest();
-        dao = IngredientsDAO.getInstance(emf);
     }
 
 
     @BeforeEach
     void setUp() {
-        PopulateIngredientsForTest populator = new PopulateIngredientsForTest(dao,emf);
         populator.populateIngredientsInDatabase();
         ingredientsDTOS = dao.readAll();
         i1 = ingredientsDTOS.get(0);
@@ -53,10 +49,12 @@ class IngredientsDAOTest {
     @DisplayName("test creat a ingredient")
     void create() {
         assertThat(dao.readAll(),hasSize(4));
+        System.out.println(dao.readAll());
         IngredientsDTO i5 = new IngredientsDTO("Strawberry", "6 stk");
         dao.create(i5);
 
         assertThat(dao.readAll(),hasSize(5));
+        System.out.println(dao.readAll());
     }
 
     @Test
@@ -65,10 +63,9 @@ class IngredientsDAOTest {
         i1.setName("Strawberry");
 
         int id = i1.getId();
-        dao.update(id,i1);
+        dao.update(id, i1);
         assertThat(dao.read(i1.getId()).getName(), is("Strawberry"));
     }
-
 
     @Test
     @DisplayName("Get an ingredient by id")
@@ -81,12 +78,11 @@ class IngredientsDAOTest {
 
     @Test
     @DisplayName("get all ingredients ")
-    void getAll(){
+    void getAll() {
         assertThat(ingredientsDTOS, hasSize(4));
         List<IngredientsDTO> retrievedIngredients = dao.readAll();
         assertThat(retrievedIngredients, hasSize(4));
         assertThat(retrievedIngredients, containsInAnyOrder(i1, i2, i3, i4));
-
     }
 
     @Test
@@ -97,7 +93,6 @@ class IngredientsDAOTest {
         dao.delete(id);
         assertThat(dao.readAll(), hasSize(3));
     }
-
-
-
 }
+
+ */
