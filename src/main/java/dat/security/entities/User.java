@@ -1,5 +1,6 @@
 package dat.security.entities;
 
+import dat.security.dtos.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.mindrot.jbcrypt.BCrypt;
@@ -8,6 +9,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Purpose: To handle security in the API
@@ -80,5 +82,20 @@ public class User implements Serializable, ISecurityUser {
                     role.getUsers().remove(this);
                 });
     }
+
+
+    public User(String username, String password, Set<Role> roles) {
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+    }
+
+    public User(UserDTO dto) {
+        this.username = dto.getUserName();
+        this.password = dto.getPassword();
+        if (dto.getRoles() != null) {
+            this.roles = dto.getRoles().stream()
+                    .map(Role::new)
+                    .collect(Collectors.toSet()); } }
 }
 
