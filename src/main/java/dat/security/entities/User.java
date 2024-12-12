@@ -1,5 +1,6 @@
 package dat.security.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dat.security.dtos.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 
+
 @ToString
 public class User implements Serializable, ISecurityUser {
 
@@ -36,8 +38,10 @@ public class User implements Serializable, ISecurityUser {
     @Column(name = "password")
     private String password;
 
+
     @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_name", referencedColumnName = "username")}, inverseJoinColumns = {@JoinColumn(name = "role_name", referencedColumnName = "name")})
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+
     private Set<Role> roles = new HashSet<>();
 
     public Set<String> getRolesAsStrings() {

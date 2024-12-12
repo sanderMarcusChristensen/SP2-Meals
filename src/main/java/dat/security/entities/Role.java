@@ -1,5 +1,6 @@
 package dat.security.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dat.security.dtos.RoleDTO;
 import jakarta.persistence.*;
 import lombok.ToString;
@@ -29,6 +30,7 @@ public class Role implements Serializable {
 
     @ToString.Exclude
     @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 
     public Role() {

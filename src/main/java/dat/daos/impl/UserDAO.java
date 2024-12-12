@@ -1,14 +1,22 @@
 package dat.daos.impl;
 
 import dat.daos.IDAO;
+import dat.dtos.MealDTO;
 import dat.entities.Ingredients;
+import dat.security.dtos.RoleDTO;
 import dat.security.dtos.UserDTO;
+import dat.security.entities.Role;
+import dat.security.entities.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.TypedQuery;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class UserDAO implements IDAO<UserDTO, Integer> {
+public class UserDAO {
 
     private static UserDAO instance;
     private static EntityManagerFactory emf;
@@ -20,33 +28,31 @@ public class UserDAO implements IDAO<UserDTO, Integer> {
         }
         return instance;
     }
-    @Override
+
     public UserDTO read(Integer integer) {
         return null;
     }
 
-    @Override
+
     public List<UserDTO> readAll() {
-        return List.of();
-    }
+        try (EntityManager em = emf.createEntityManager()) {
+            TypedQuery<User> query = em.createQuery("SELECT u FROM User u", User.class);
+            List<User> users = query.getResultList();
 
-    @Override
-    public UserDTO create(UserDTO userDTO) {
-        return null;
-    }
-
-    @Override
-    public UserDTO update(Integer integer, UserDTO userDTO) {
-        return null;
-    }
-
-    @Override
-    public void delete(Integer integer) {
-
+            List<UserDTO> list = new ArrayList<>();
+            for (User u : users) {
+                UserDTO dto = new UserDTO(u);
+                list.add(dto);
+            }
+            return list;
+        }
     }
 
 
-    @Override
+
+
+
+
     public boolean validatePrimaryKey(Integer integer) {
         try (EntityManager em = emf.createEntityManager()) {
             Ingredients ingredients = em.find(Ingredients.class, integer);

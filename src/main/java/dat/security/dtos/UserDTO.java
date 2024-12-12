@@ -23,12 +23,18 @@ public class UserDTO {
         this.roles = roles;
     }
 
-    public UserDTO(User user){
+    public UserDTO(String username){
+        this.userName = username;
+    }
+
+    public UserDTO(User user) {
         this.userName = user.getUsername();
         this.password = user.getPassword();
-
         if (user.getRoles() != null) {
             this.roles = user.getRoles().stream()
-                    .map(RoleDTO::new)
-                    .collect(Collectors.toSet()); } }
+                    .map(role -> new RoleDTO(role.getRoleName())) // Only map role name or basic details
+                    .collect(Collectors.toSet());
+        }
+    }
+
 }
