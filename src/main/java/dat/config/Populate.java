@@ -2,8 +2,11 @@ package dat.config;
 
 import dat.entities.Meal;
 import dat.entities.Ingredients;
+import dat.security.entities.Role;
+import dat.security.entities.User;
 import jakarta.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
+
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,11 +14,15 @@ import java.util.List;
 import java.util.Set;
 
 public class Populate {
+
     public static void main(String[] args) {
+
+
 
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
 
         Set<Meal> meals = getMeals(); // Get meals with ingredients
+
 
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -24,6 +31,10 @@ public class Populate {
             for (Meal meal : meals) {
                 em.persist(meal);
             }
+
+           for(User u : getUsers()){
+               em.persist(u);
+           }
 
             em.getTransaction().commit();
             em.close();
@@ -150,5 +161,52 @@ public class Populate {
         mealSet.add(meal7);
 
         return mealSet;
+    }
+
+    private static Set<User> getUsers(){
+
+        Set<User> userSet = new HashSet<>();
+
+        //Roles
+        Role admin = new Role("admin");
+        Role user = new Role("user");
+
+
+        // Set's with Roles
+        Set<Role> adminRole = new HashSet<>();
+        adminRole.add(admin);
+
+        Set<Role> userRole = new HashSet<>();
+        adminRole.add(user);
+
+        //Users
+        User chad = new User("Chad","123");
+        chad.setRoles(adminRole);
+
+        User Sander = new User("Sander","123");
+        Sander.setRoles(adminRole);
+
+        User Mateen = new User("Mateen","123");
+        Mateen.setRoles(adminRole);
+
+        User Marcus = new User("Marcus","123");
+        Marcus.setRoles(adminRole);
+
+        User Jon = new User("Jon","123");
+        Jon.setRoles(userRole);
+
+        User Thomas = new User("Thomas","123");
+        Thomas.setRoles(userRole);
+
+
+        userSet.add(chad);
+        userSet.add(Sander);
+        userSet.add(Mateen);
+        userSet.add(Marcus);
+        userSet.add(Jon);
+        userSet.add(Thomas);
+
+        return userSet;
+
     }
 }
