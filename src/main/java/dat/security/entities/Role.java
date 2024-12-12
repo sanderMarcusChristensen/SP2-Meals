@@ -1,5 +1,7 @@
 package dat.security.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import dat.security.dtos.RoleDTO;
 import jakarta.persistence.*;
 import lombok.ToString;
 
@@ -7,6 +9,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Purpose: To handle security in the API
@@ -27,6 +30,7 @@ public class Role implements Serializable {
 
     @ToString.Exclude
     @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 
     public Role() {
@@ -48,4 +52,17 @@ public class Role implements Serializable {
     public String toString() {
         return "Role{" + "roleName='" + name + '\'' + '}';
     }
+
+
+    public Role(String name, Set<User> users) {
+        this.name = name;
+        this.users = users;
+    }
+
+    public Role(RoleDTO dto) {
+        this.name = dto.getName();
+        if (dto.getUsers() != null) {
+            this.users = dto.getUsers().stream()
+                    .map(User::new)
+                    .collect(Collectors.toSet()); } }
 }

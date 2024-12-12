@@ -171,7 +171,6 @@ public class Populate {
         Role admin = new Role("admin");
         Role user = new Role("user");
 
-
         // Set's with Roles
         Set<Role> adminRole = new HashSet<>();
         adminRole.add(admin);
@@ -180,16 +179,16 @@ public class Populate {
         adminRole.add(user);
 
         //Users
-        User chad = new User("Chad","123");
+        User chad = new User("Chad","admin");
         chad.setRoles(adminRole);
 
-        User Sander = new User("Sander","123");
+        User Sander = new User("Sander","admin");
         Sander.setRoles(adminRole);
 
-        User Mateen = new User("Mateen","123");
+        User Mateen = new User("Mateen","admin");
         Mateen.setRoles(adminRole);
 
-        User Marcus = new User("Marcus","123");
+        User Marcus = new User("Marcus","admin");
         Marcus.setRoles(adminRole);
 
         User Jon = new User("Jon","123");
@@ -198,6 +197,14 @@ public class Populate {
         User Thomas = new User("Thomas","123");
         Thomas.setRoles(userRole);
 
+        User Thor = new User("Thor","123");
+        Thor.setRoles(userRole);
+
+        User Jens = new User("Jens","123");
+        Jens.setRoles(userRole);
+
+        User Bingo = new User("Bingo","123");
+        Bingo.setRoles(userRole);
 
         userSet.add(chad);
         userSet.add(Sander);
@@ -205,6 +212,9 @@ public class Populate {
         userSet.add(Marcus);
         userSet.add(Jon);
         userSet.add(Thomas);
+        userSet.add(Thor);
+        userSet.add(Jens);
+        userSet.add(Bingo);
 
         return userSet;
 
