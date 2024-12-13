@@ -162,7 +162,7 @@ public class Populate {
 
         // Add 20 test meals
         //Delete this code block if you want to remove the test meals
-        for (int i = 1; i <= 20; i++) {
+        for (int i = 1; i <= 10; i++) {
             List<Ingredients> testIngredients = new ArrayList<>();
             testIngredients.add(new Ingredients("Test Ingredient " + i, i + "g"));
             testIngredients.add(new Ingredients("Extra Ingredient " + i, (i * 2) + "g"));
