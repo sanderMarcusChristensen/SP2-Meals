@@ -1,5 +1,7 @@
 package dat.security.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import dat.security.dtos.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.mindrot.jbcrypt.BCrypt;
@@ -8,6 +10,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Purpose: To handle security in the API
@@ -19,7 +22,8 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+
+
 @ToString
 public class User implements Serializable, ISecurityUser {
 
@@ -34,8 +38,10 @@ public class User implements Serializable, ISecurityUser {
     @Column(name = "password")
     private String password;
 
+
     @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_name", referencedColumnName = "username")}, inverseJoinColumns = {@JoinColumn(name = "role_name", referencedColumnName = "name")})
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+
     private Set<Role> roles = new HashSet<>();
 
     public Set<String> getRolesAsStrings() {
@@ -80,5 +86,20 @@ public class User implements Serializable, ISecurityUser {
                     role.getUsers().remove(this);
                 });
     }
+
+
+    public User(String username, String password, Set<Role> roles) {
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+    }
+
+    public User(UserDTO dto) {
+        this.username = dto.getUserName();
+        this.password = dto.getPassword();
+        if (dto.getRoles() != null) {
+            this.roles = dto.getRoles().stream()
+                    .map(Role::new)
+                    .collect(Collectors.toSet()); } }
 }
 

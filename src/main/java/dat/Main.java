@@ -9,6 +9,7 @@ public class Main {
         AppConfig.startServer(ApiProperties.PORT);
         Populate.main(args);
 
+        // populate database
 
     }
 }
