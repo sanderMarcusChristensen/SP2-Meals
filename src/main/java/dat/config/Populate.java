@@ -176,7 +176,7 @@ public class Populate {
         adminRole.add(admin);
 
         Set<Role> userRole = new HashSet<>();
-        adminRole.add(user);
+        userRole.add(user);
 
         //Users
         User chad = new User("Chad","admin");
