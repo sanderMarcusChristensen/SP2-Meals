@@ -143,7 +143,7 @@ public class Populate {
         ingredients7.add(new Ingredients("Olive oil", "2 tbsp"));
         ingredients7.add(new Ingredients("Garlic", "2 cloves"));
         ingredients7.add(new Ingredients("Fresh herbs", "1 tbsp"));
-        Meal meal7 = new Meal("Grilled Salmon", "Deliciously grilled salmon fillets with a light lemon and herb seasoning.",
+        Meal meal7 = new Meal("Gay Salmon", "Deliciously grilled salmon fillets with a light lemon and herb seasoning.",
                 "1. Preheat the grill to medium heat.\n" +
                         "2. Brush the salmon fillets with olive oil and season with minced garlic, lemon juice, and fresh herbs.\n" +
                         "3. Grill the salmon for 5-7 minutes per side, depending on thickness, until the fish is cooked through and flakes easily.\n" +
@@ -159,6 +159,25 @@ public class Populate {
         mealSet.add(meal5);
         mealSet.add(meal6);
         mealSet.add(meal7);
+
+        // Add 20 test meals
+        //Delete this code block if you want to remove the test meals
+        for (int i = 1; i <= 20; i++) {
+            List<Ingredients> testIngredients = new ArrayList<>();
+            testIngredients.add(new Ingredients("Test Ingredient " + i, i + "g"));
+            testIngredients.add(new Ingredients("Extra Ingredient " + i, (i * 2) + "g"));
+
+            Meal testMeal = new Meal(
+                    "Test Meal " + i,
+                    "This is a test meal description for Test Meal " + i + ".",
+                    "1. Prepare Test Meal " + i + " with simple steps.\n2. Test cooking it for testing purposes.\n3. Serve Test Meal " + i + " hot.",
+                    (double) (10 + i), // Random preparation time
+                    3.0 + (i % 5) * 0.1 // Random rating
+            );
+            testMeal.setIngredients(testIngredients);
+            mealSet.add(testMeal);
+        }
+        //End of test meals
 
         return mealSet;
     }
@@ -220,3 +239,4 @@ public class Populate {
 
     }
 }
+
