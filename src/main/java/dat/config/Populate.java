@@ -143,7 +143,7 @@ public class Populate {
         ingredients7.add(new Ingredients("Olive oil", "2 tbsp"));
         ingredients7.add(new Ingredients("Garlic", "2 cloves"));
         ingredients7.add(new Ingredients("Fresh herbs", "1 tbsp"));
-        Meal meal7 = new Meal("Gay Salmon", "Deliciously grilled salmon fillets with a light lemon and herb seasoning.",
+        Meal meal7 = new Meal("Grilled Salmon", "Deliciously grilled salmon fillets with a light lemon and herb seasoning.",
                 "1. Preheat the grill to medium heat.\n" +
                         "2. Brush the salmon fillets with olive oil and season with minced garlic, lemon juice, and fresh herbs.\n" +
                         "3. Grill the salmon for 5-7 minutes per side, depending on thickness, until the fish is cooked through and flakes easily.\n" +
